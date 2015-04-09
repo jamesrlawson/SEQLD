@@ -1,0 +1,17 @@
+{
+    "contents" : "hydro <- read.csv(\"data/hydro.csv\")\n\nhydro_ <- hydro[order(hydro$AS20YrARInorm),]\nplot(hydro_$AS20YrARInorm)\n\nhydro_ <- hydro[order(hydro$CV),]\nplot(hydro_$CV)\n\nhydro.pca <- prcomp(hydro[,2:14], center = TRUE, scale. = TRUE, )\nsummary(hydro.pca)\nbiplot(hydro.pca)\nplot(hydro.pca)\nggbiplot(hydro.pca)\n\nView(cor(hydro[,2:14]))\n",
+    "created" : 1428477170178.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1622683949",
+    "id" : "7353D433",
+    "lastKnownWriteTime" : 7598543875328668517,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
