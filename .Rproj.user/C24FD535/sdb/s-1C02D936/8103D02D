@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1430199174201.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "8103D02D",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "traitsw",
+        "contentUrl" : "content?title=traitsw&file=97180b693c6a4743b50954e2b7906c51.htm",
+        "displayedObservations" : "461",
+        "displayedVariables" : 4,
+        "totalObservations" : "461",
+        "variables" : "3"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
