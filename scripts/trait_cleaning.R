@@ -6,6 +6,9 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
 
 ####### CLEAN SLA AND LMA DATA #######
 
+
+  # traits <- subset(traits, source != "AUSTRAITS_dataset_52") # 52 is TRY data. activate this line to remove.
+
   # trim white spaces in units
   
   traits$SLA.units <- trim(traits$SLA.units)
@@ -55,3 +58,20 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
   
   write.csv(traits.SLA, "output/traits_SLA.csv")
   write.csv(dodgy.SLA, "output/dodgy_SLA.csv")
+
+
+  # identify SLA records only available in the TRY database (52, see top of section)
+
+  #withTRY.SLA <- traits.SLA # run with this line, including TRY above
+  #sansTRY.SLA <- traits.SLA # run with this line, excluding TRY above
+  
+  #sansTRY.SLA.records <- withTRY[!withTRY.SLA$SLA %in% sansTRY.SLA$SLA,] 
+  #sansTRY.SLAspecies <- withTRY[!withTRY.SLA$Taxon %in% sansTRY.SLA$Taxon,] 
+
+  # results are: 17 unique records and 1 unique species (Macadamia tetraphylla)
+
+
+
+
+
+
