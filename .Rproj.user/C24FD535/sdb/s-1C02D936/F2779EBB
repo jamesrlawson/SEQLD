@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1430202315118.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F2779EBB",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "traits.leafarea",
+        "contentUrl" : "content?title=traits.leafarea&file=f05659ca14da4e9b9c5c3c03833ac940.htm",
+        "displayedObservations" : "839",
+        "displayedVariables" : 3,
+        "totalObservations" : "839",
+        "variables" : "3"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

@@ -27,6 +27,7 @@ units.SLA <- function(df) {
   
 }
 
+
 units.LMA <- function(df) {
   
   df$SLAfromLMA <- "NA"

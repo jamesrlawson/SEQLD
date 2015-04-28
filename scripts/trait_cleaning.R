@@ -62,16 +62,42 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
 
   # identify SLA records only available in the TRY database (52, see top of section)
 
-  #withTRY.SLA <- traits.SLA # run with this line, including TRY above
-  #sansTRY.SLA <- traits.SLA # run with this line, excluding TRY above
+  # withTRY.SLA <- traits.SLA # run with this line, including TRY above
+  # sansTRY.SLA <- traits.SLA # run with this line, excluding TRY above
   
-  #sansTRY.SLA.records <- withTRY[!withTRY.SLA$SLA %in% sansTRY.SLA$SLA,] 
-  #sansTRY.SLAspecies <- withTRY[!withTRY.SLA$Taxon %in% sansTRY.SLA$Taxon,] 
+  # sansTRY.SLA.records <- withTRY[!withTRY.SLA$SLA %in% sansTRY.SLA$SLA,] 
+  # sansTRY.SLAspecies <- withTRY[!withTRY.SLA$Taxon %in% sansTRY.SLA$Taxon,] 
 
   # results are: 17 unique records and 1 unique species (Macadamia tetraphylla)
 
+####### CLEAN LEAF AREA ######
 
-
-
-
-
+  # remove duplicate entries of leaf area
+  
+  traits.leafarea <- cbind(traits["Taxon"],traits["leaf.area"],traits["source"])
+                                                
+  
+  traits.leafarea <- na.omit(traits.leafarea[!duplicated(traits.leafarea[,c("Taxon","leaf.area")]),])
+  traits.leafarea <- traits.leafarea[order(traits.leafarea$Taxon),]
+  
+  # summarise intraspecies variation in SLA
+  
+  traits.leafarea.CV <- ddply(traits.leafarea, 
+                              .(Taxon), 
+                              summarise, 
+                              CV = CV(leaf.area),
+                              sd = sd(leaf.area),
+                              mean = mean(leaf.area),
+                              median = median(leaf.area),
+                              count = length(leaf.area))
+  
+  # find species with CV of > 0.3 for SLA
+  
+  dodgy.leafarea <- traits.leafarea[traits.leafarea$Taxon %in% as.character(subset(traits.leafarea.CV, CV > 0.5)$Taxon), ]
+  dodgy.leafarea <- dodgy.leafarea[order(dodgy.leafarea$Taxon), ]
+  
+  
+  # output
+  
+  write.csv(traits.leafarea, "output/traits_leafarea.csv")
+  write.csv(dodgy.leafarea, "output/dodgy_leafarea.csv")
