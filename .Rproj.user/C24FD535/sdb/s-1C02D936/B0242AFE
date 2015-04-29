@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1430290378921.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B0242AFE",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "traits",
+        "contentUrl" : "content?title=traits&file=89638059feb54455a4c234e9ac70b5f9.htm",
+        "displayedObservations" : "1000",
+        "displayedVariables" : 14,
+        "totalObservations" : "2306",
+        "variables" : "14"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

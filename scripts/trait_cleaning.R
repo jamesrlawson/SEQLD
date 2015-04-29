@@ -153,5 +153,29 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
   
   write.csv(traits.maxheight.vines, "maxheight_vines.csv")
 
+####### CLEAN SEED MASS DATA #######
 
 
+  # find relationship between seed mass and seed volume
+  
+  seedmass_volume <- read.csv("data/traits/seedmass_volume.csv", header=T)
+  
+  plot(log10(seedmass_volume$seed.volume), log10(seedmass_volume$mean.seed.mass))
+  
+  seedmass_volume.lm <- lm(log10(mean.seed.mass) ~ log10(seed.volume), data = seedmass_volume)
+  
+  
+  # use known relationship between seed mass and volume to impute seed mass where only volume is known
+  
+  traits.seedvol <- subset(traits, seed.volume != "NA")
+  traits.seedvol <- cbind(traits.seedvol["Taxon"],
+                          traits.seedvol["seed.volume"],
+                          traits.seedvol["source"])
+  
+  traits.seedvol <- na.omit(traits.seedvol[!duplicated(traits.seedvol[,c("Taxon","seed.volume")]),])
+  traits.seedvol <- traits.seedvol[order(traits.seedvol$Taxon),]
+  
+  traits.seedvol$seedmass.predicted <- predict.lm(seedmass_volume.lm, traits.seedvol)
+  traits.seedvol$seedmass.predicted  <- 10^traits.seedvol$seedmass.predicted # merge this data in with duplicate screened seedmass data
+    
+     
