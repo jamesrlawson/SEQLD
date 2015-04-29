@@ -70,7 +70,7 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
 
   # results are: 17 unique records and 1 unique species (Macadamia tetraphylla)
 
-####### CLEAN LEAF AREA ######
+####### CLEAN LEAF AREA DATA ######
 
   # remove duplicate entries of leaf area
   
@@ -80,7 +80,7 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
   traits.leafarea <- na.omit(traits.leafarea[!duplicated(traits.leafarea[,c("Taxon","leaf.area")]),])
   traits.leafarea <- traits.leafarea[order(traits.leafarea$Taxon),]
   
-  # summarise intraspecies variation in SLA
+  # summarise intraspecies variation in leaf area
   
   traits.leafarea.CV <- ddply(traits.leafarea, 
                               .(Taxon), 
@@ -91,7 +91,7 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
                               median = median(leaf.area),
                               count = length(leaf.area))
   
-  # find species with CV of > 0.3 for SLA
+  # find species with CV of > 0.3 for leaf area
   
   dodgy.leafarea <- traits.leafarea[traits.leafarea$Taxon %in% as.character(subset(traits.leafarea.CV, CV > 0.5)$Taxon), ]
   dodgy.leafarea <- dodgy.leafarea[order(dodgy.leafarea$Taxon), ]
@@ -101,3 +101,32 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
   
   write.csv(traits.leafarea, "output/traits_leafarea.csv")
   write.csv(dodgy.leafarea, "output/dodgy_leafarea.csv")
+
+####### CLEAN WOOD DENSITY DATA ######
+
+traits.WD <- units.WD(traits)
+
+traits.WD <- cbind(traits.WD["Taxon"],traits.WD["wood.density"],traits.WD["source"])
+
+
+traits.WD <- na.omit(traits.WD[!duplicated(traits.WD[,c("Taxon","wood.density")]),])
+traits.WD <- traits.WD[order(traits.WD$Taxon),]
+
+# summarise intraspecies variation in wood density
+
+traits.WD.CV <- ddply(traits.WD, 
+                      .(Taxon), 
+                      summarise, 
+                      CV = CV(wood.density),
+                      sd = sd(wood.density),
+                      mean = mean(wood.density),
+                      median = median(wood.density),
+                      count = length(wood.density))
+
+# find species with CV of > 0.3 for wood density
+
+dodgy.wood.density <- traits.WD[traits.WD$Taxon %in% as.character(subset(traits.WD.CV, CV > 0.2)$Taxon), ]
+dodgy.wood.density <- dodgy.wood.density[order(dodgy.wood.density$Taxon), ]
+
+write.csv(traits.WD, "output/traits_wooddensity.csv")
+write.csv(dodgy.wood.density, "output/dodgy_wooddensity.csv")

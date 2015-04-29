@@ -61,3 +61,27 @@ SLA_LMA.combine <- function(df) {
 return(df)
 
 }
+
+
+units.WD <- function(df) {
+      
+    for(i in 1:nrow(df)) {    
+      
+      if(is.na(df$wood.density[i])) {
+        df$wood.density[i] <- as.numeric("NA")
+        
+       } else {          
+          if (df$wood.density[i] < 10) {
+            df$wood.density[i] <- as.numeric(df$wood.density[i])
+            
+          } else {
+            if (df$wood.density[i] > 10) {
+              df$wood.density[i] <- as.numeric(df$wood.density[[i]]) * 0.001
+            }
+          }                  
+      }                
+    }
+    
+    return(df)
+    
+  }

@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1430271416140.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "40A90C93",
+    "lastKnownWriteTime" : 7741240723082584096,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "traits.WD.CV",
+        "contentUrl" : "content?title=traits.WD.CV&file=f41f54a8012f48cba9bfcce05b904f1e.htm",
+        "displayedObservations" : 119,
+        "displayedVariables" : 6,
+        "totalObservations" : 119,
+        "variables" : 6
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
