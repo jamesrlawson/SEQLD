@@ -102,31 +102,56 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
   write.csv(traits.leafarea, "output/traits_leafarea.csv")
   write.csv(dodgy.leafarea, "output/dodgy_leafarea.csv")
 
+# identify SLA records only available in the TRY database (52, see top of section)
+
 ####### CLEAN WOOD DENSITY DATA ######
 
-traits.WD <- units.WD(traits)
+  traits.WD <- units.WD(traits)
+  
+  traits.WD <- cbind(traits.WD["Taxon"],traits.WD["wood.density"],traits.WD["source"])
+  
+  
+  traits.WD <- na.omit(traits.WD[!duplicated(traits.WD[,c("Taxon","wood.density")]),])
+  traits.WD <- traits.WD[order(traits.WD$Taxon),]
+  
+  # summarise intraspecies variation in wood density
+  
+  traits.WD.CV <- ddply(traits.WD, 
+                        .(Taxon), 
+                        summarise, 
+                        CV = CV(wood.density),
+                        sd = sd(wood.density),
+                        mean = mean(wood.density),
+                        median = median(wood.density),
+                        count = length(wood.density))
+  
+  # find species with CV of > 0.3 for wood density
+  
+  dodgy.wood.density <- traits.WD[traits.WD$Taxon %in% as.character(subset(traits.WD.CV, CV > 0.2)$Taxon), ]
+  dodgy.wood.density <- dodgy.wood.density[order(dodgy.wood.density$Taxon), ]
+  
+  write.csv(traits.WD, "output/traits_wooddensity.csv")
+  write.csv(dodgy.wood.density, "output/dodgy_wooddensity.csv")
+  
+  # identify WD records only available in the TRY database (52, see top of section)
 
-traits.WD <- cbind(traits.WD["Taxon"],traits.WD["wood.density"],traits.WD["source"])
+####### CLEAN MAXIMUM HEIGHT DATA #######
+
+  # find maxheight record with the greatest value for each species
+
+  traits.maxheight <- as.data.frame(cbind(traits["Taxon"], 
+                                                traits["maximum.height"], 
+                                                traits["source"]))
+  
+  traits.maxheight <- ddply(traits.maxheight, .(Taxon), function(x) x[which.max(x$maximum.height),])
+                                                                                            
+  # vine maxheight is suspect; list of vines can be found in vines.csv
+  
+  vines <- read.csv("data/traits/vines.csv", header=T)
+  
+  traits.maxheight.vines <- traits.maxheight[traits.maxheight$Taxon %in% vines$Taxon, ]
+  
+  write.csv(traits.maxheight.vines, "maxheight_vines.csv")
 
 
-traits.WD <- na.omit(traits.WD[!duplicated(traits.WD[,c("Taxon","wood.density")]),])
-traits.WD <- traits.WD[order(traits.WD$Taxon),]
 
-# summarise intraspecies variation in wood density
-
-traits.WD.CV <- ddply(traits.WD, 
-                      .(Taxon), 
-                      summarise, 
-                      CV = CV(wood.density),
-                      sd = sd(wood.density),
-                      mean = mean(wood.density),
-                      median = median(wood.density),
-                      count = length(wood.density))
-
-# find species with CV of > 0.3 for wood density
-
-dodgy.wood.density <- traits.WD[traits.WD$Taxon %in% as.character(subset(traits.WD.CV, CV > 0.2)$Taxon), ]
-dodgy.wood.density <- dodgy.wood.density[order(dodgy.wood.density$Taxon), ]
-
-write.csv(traits.WD, "output/traits_wooddensity.csv")
-write.csv(dodgy.wood.density, "output/dodgy_wooddensity.csv")
