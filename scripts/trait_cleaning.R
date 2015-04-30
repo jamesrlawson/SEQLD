@@ -2,7 +2,7 @@ source("scripts/functions.R")
 
 library(plyr)
 
-traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
+traits <- read.csv("data/traits/RF_trait_data2a.csv", header=T)
 
 ####### CLEAN SLA AND LMA DATA #######
 
@@ -155,27 +155,69 @@ traits <- read.csv("data/traits/RF_trait_data2.csv", header=T)
 
 ####### CLEAN SEED MASS DATA #######
 
+  traits.seedmass <- cbind(traits["Taxon"],traits["seed.mass"],traits["source"])
+  
+  traits.seedmass <- na.omit(traits.seedmass[!duplicated(traits.seedmass[,c("Taxon","seed.mass")]),])
+  traits.seedmass <- traits.seedmass[order(traits.seedmass$Taxon),]
+  
 
-  # find relationship between seed mass and seed volume
+####### IMPUTE SEED MASSES FROM SEED VOLUME AND MERGE WITH SEEDMASS DATA #######
   
-  seedmass_volume <- read.csv("data/traits/seedmass_volume.csv", header=T)
-  
-  plot(log10(seedmass_volume$seed.volume), log10(seedmass_volume$mean.seed.mass))
-  
-  seedmass_volume.lm <- lm(log10(mean.seed.mass) ~ log10(seed.volume), data = seedmass_volume)
-  
-  
-  # use known relationship between seed mass and volume to impute seed mass where only volume is known
-  
-  traits.seedvol <- subset(traits, seed.volume != "NA")
-  traits.seedvol <- cbind(traits.seedvol["Taxon"],
-                          traits.seedvol["seed.volume"],
-                          traits.seedvol["source"])
-  
-  traits.seedvol <- na.omit(traits.seedvol[!duplicated(traits.seedvol[,c("Taxon","seed.volume")]),])
-  traits.seedvol <- traits.seedvol[order(traits.seedvol$Taxon),]
-  
-  traits.seedvol$seedmass.predicted <- predict.lm(seedmass_volume.lm, traits.seedvol)
-  traits.seedvol$seedmass.predicted  <- 10^traits.seedvol$seedmass.predicted # merge this data in with duplicate screened seedmass data
+    # find relationship between seed mass and seed volume
     
-     
+    seedmass_volume <- read.csv("data/traits/seedmass_volume.csv", header=T)
+    
+    plot(log10(seedmass_volume$seed.volume), log10(seedmass_volume$mean.seed.mass))
+    
+    seedmass_volume.lm <- lm(log10(mean.seed.mass) ~ log10(seed.volume), data = seedmass_volume)
+    
+    
+    # use known relationship between seed mass and volume to impute seed mass where only volume is known
+    
+    traits.seedvol <- subset(traits, seed.volume != "NA")
+    traits.seedvol <- cbind(traits.seedvol["Taxon"],
+                            traits.seedvol["seed.volume"],
+                            traits.seedvol["source"])
+    
+    traits.seedvol <- na.omit(traits.seedvol[!duplicated(traits.seedvol[,c("Taxon","seed.volume")]),])
+    traits.seedvol <- traits.seedvol[order(traits.seedvol$Taxon),]
+    
+    traits.seedvol$seedmass.predicted <- predict.lm(seedmass_volume.lm, traits.seedvol)
+    traits.seedvol$seedmass.predicted  <- 10^traits.seedvol$seedmass.predicted 
+       
+  # merge predicted values in with duplicate-screened seedmass data
+
+  traits.seedvol1 <- cbind(traits.seedvol["Taxon"], 
+                           traits.seedvol["seedmass.predicted"],
+                           traits.seedvol["source"])
+  colnames(traits.seedvol1)[2] <- c("seed.mass")
+
+  traits.seedmass <- rbind(traits.seedvol1, traits.seedmass)
+
+  # summarise intraspecies variation in seed mass
+
+  traits.seedmass.CV <- ddply(traits.seedmass, 
+                              .(Taxon), 
+                              summarise, 
+                              CV = CV(seed.mass),
+                              sd = sd(seed.mass),
+                              mean = mean(seed.mass),
+                              median = median(seed.mass),
+                              count = length(seed.mass))
+  
+  # find species with CV of > 0.3 for seed mass
+  
+  dodgy.seed.mass <- traits.seedmass[traits.seedmass$Taxon %in% as.character(subset(traits.seedmass.CV, CV > 0.5)$Taxon), ]
+  dodgy.seed.mass <- dodgy.seed.mass[order(dodgy.seed.mass$Taxon), ]
+  
+  write.csv(traits.seedmass, "output/traits_seedmass.csv")
+  write.csv(dodgy.seed.mass, "output/dodgy_seedmass.csv") 
+  
+        # AUSTRAITS_DATABASE49 seems to be responsible for a lot of records that are out by a factor of 10.
+        # not all of the values from 49 are out of whack though, so bulk multiplication is not possible
+
+
+
+
+
+
