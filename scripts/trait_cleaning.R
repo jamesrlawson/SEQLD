@@ -2,7 +2,7 @@ source("scripts/functions.R")
 
 library(plyr)
 
-traits <- read.csv("data/traits/RF_trait_data2a.csv", header=T)
+traits <- read.csv("data/traits/RF_trait_data2c.csv", header=T)
 
 ####### CLEAN SLA AND LMA DATA #######
 
@@ -216,7 +216,13 @@ traits <- read.csv("data/traits/RF_trait_data2a.csv", header=T)
         # AUSTRAITS_DATABASE49 seems to be responsible for a lot of records that are out by a factor of 10.
         # not all of the values from 49 are out of whack though, so bulk multiplication is not possible
 
+####### CLEAN FLOWERING TIME DATA #######
 
+# flowering time dataset is incomplete and in the wrong format. Need to work on it manually.
+
+blah <- subset(traits, flowering.duration != "")
+
+write.csv(blah, "output/floweringtimes.csv")
 
 
 
