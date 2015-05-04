@@ -2,7 +2,7 @@ source("scripts/functions.R")
 
 library(plyr)
 
-traits <- read.csv("data/traits/RF_trait_data2c.csv", header=T)
+traits <- read.csv("data/traits/RF_trait_data2g.csv", header=T)
 
 ####### CLEAN SLA AND LMA DATA #######
 
@@ -17,6 +17,7 @@ traits <- read.csv("data/traits/RF_trait_data2c.csv", header=T)
   # convert SLA units 
   
   traits.SLA <- units.SLA(traits)
+#traits.SLA <- traits
   
   #hist(subset(traits.SLA, SLA.units == "cm2/g")$SLA) 
   #hist(subset(traits.SLA, SLA.units == "m2/kg")$SLA)  # reference - distribution should centre around 10
@@ -153,6 +154,13 @@ traits <- read.csv("data/traits/RF_trait_data2c.csv", header=T)
   
   write.csv(traits.maxheight.vines, "maxheight_vines.csv")
 
+  # remove vine data from maxheight
+
+  traits.maxheight_sansvines <- merge(traits.maxheight, vines, all.x = TRUE)
+  traits.maxheight_sansvines <- subset(traits.maxheight_sansvines, is.na(vine))
+
+  write.csv(traits.maxheight_sansvines, "output/traits_maxheight.csv")
+
 ####### CLEAN SEED MASS DATA #######
 
   traits.seedmass <- cbind(traits["Taxon"],traits["seed.mass"],traits["source"])
@@ -218,12 +226,20 @@ traits <- read.csv("data/traits/RF_trait_data2c.csv", header=T)
 
 ####### CLEAN FLOWERING TIME DATA #######
 
-# flowering time dataset is incomplete and in the wrong format. Need to work on it manually.
+# flowering times have been reworked manually. will need to add more data from flora later.
 
-blah <- subset(traits, flowering.duration != "")
+traits.flowering.duration <- as.data.frame(cbind(traits["Taxon"], 
+                                        traits["flowering.duration"], 
+                                        traits["source"]))
+traits.flowering.duration <- na.omit(traits.flowering.duration)
 
-write.csv(blah, "output/floweringtimes.csv")
+length(unique(traits.flowering.duration$Taxon))
 
+####### COMBINE TRAIT AVERAGES #######
 
-
-
+traits.SLA_avg <- ddply(traits.SLA, .(Taxon), summarise, SLA.avg = mean(SLA), SLA.sd = sd(SLA))
+traits.leafarea_avg <- ddply(traits.leafarea, .(Taxon), summarise, leafarea.avg = mean(leaf.area), leafarea.SD = sd(leaf.area))
+traits.WD_avg <- ddply(traits.WD, .(Taxon), summarise, WD.avg = mean(wood.density), WD.SD = sd(wood.density))
+traits.maxheight_avg <- ddply(traits.maxheight, .(Taxon), summarise, maxheight.avg = mean(maximum.height), maxheight.SD = sd(maximum.height))
+traits.seedmass_avg <- ddply(traits.seedmass, .(Taxon), summarise, seedmass.avg = mean(seed.mass), seedmass.SD = sd(seed.mass))
+traits.flowering.duration_avg <- ddply(traits.flowering.duration, .(Taxon), summarise, flowering.duration.avg = mean(flowering.duration), flowering.duration.SD = sd(flowering.duration))
