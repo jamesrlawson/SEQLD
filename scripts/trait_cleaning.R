@@ -1,6 +1,7 @@
 source("scripts/functions.R")
 
 library(plyr)
+library(reshape2)
 
 traits <- read.csv("data/traits/RF_trait_data2g.csv", header=T)
 
@@ -237,9 +238,40 @@ length(unique(traits.flowering.duration$Taxon))
 
 ####### COMBINE TRAIT AVERAGES #######
 
-traits.SLA_avg <- ddply(traits.SLA, .(Taxon), summarise, SLA.avg = mean(SLA), SLA.sd = sd(SLA))
-traits.leafarea_avg <- ddply(traits.leafarea, .(Taxon), summarise, leafarea.avg = mean(leaf.area), leafarea.SD = sd(leaf.area))
-traits.WD_avg <- ddply(traits.WD, .(Taxon), summarise, WD.avg = mean(wood.density), WD.SD = sd(wood.density))
-traits.maxheight_avg <- ddply(traits.maxheight, .(Taxon), summarise, maxheight.avg = mean(maximum.height), maxheight.SD = sd(maximum.height))
-traits.seedmass_avg <- ddply(traits.seedmass, .(Taxon), summarise, seedmass.avg = mean(seed.mass), seedmass.SD = sd(seed.mass))
-traits.flowering.duration_avg <- ddply(traits.flowering.duration, .(Taxon), summarise, flowering.duration.avg = mean(flowering.duration), flowering.duration.SD = sd(flowering.duration))
+  # find average trait values
+  traits.SLA_avg <- ddply(traits.SLA, .(Taxon), summarise, avg = mean(SLA), CV = CV(SLA), n = length(SLA))
+  traits.leafarea_avg <- ddply(traits.leafarea, .(Taxon), summarise, avg = mean(leaf.area), CV = CV(leaf.area), n = length(leaf.area))
+  traits.WD_avg <- ddply(traits.WD, .(Taxon), summarise, avg = mean(wood.density), CV = CV(wood.density), n = length(wood.density))
+  traits.maxheight_avg <- ddply(traits.maxheight_sansvines, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
+  traits.seedmass_avg <- ddply(traits.seedmass, .(Taxon), summarise, avg = mean(seed.mass), CV = CV(seed.mass), n = length(seed.mass))
+  traits.flowering.duration_avg <- ddply(traits.flowering.duration, .(Taxon), summarise, avg = mean(flowering.duration), CV = CV(flowering.duration), n = length(flowering.duration))
+  
+  traits.SLA_avg$trait <- c("SLA")
+  traits.leafarea_avg$trait <- c("leaf.area")
+  traits.WD_avg$trait <- c("wood.density")
+  traits.maxheight_avg$trait <- c("maximum.height")
+  traits.seedmass_avg$trait <- c("seed.mass")
+  traits.flowering.duration_avg$trait <- c("flowering.duration")
+
+  # combine and transform from long to wide format
+
+  alltraits <- rbind(traits.SLA_avg, 
+                     traits.leafarea_avg,
+                     traits.WD_avg,
+                     traits.maxheight_avg,
+                     traits.seedmass_avg,
+                     traits.flowering.duration_avg)
+
+  alltraits <- dcast(alltraits, Taxon ~ trait, value.var = "avg", fill="NA")
+
+  alltraits$SLA <- as.numeric(alltraits$SLA)
+  alltraits$leaf.area <- as.numeric(alltraits$leaf.area)
+  alltraits$wood.density <- as.numeric(alltraits$wood.density)
+  alltraits$maximum.height <- as.numeric(alltraits$maximum.height)
+  alltraits$seed.mass <- as.numeric(alltraits$seed.mass)
+  alltraits$flowering.duration <- as.numeric(alltraits$flowering.duration)
+
+  write.csv(alltraits, "output/alltraits.csv")
+
+
+

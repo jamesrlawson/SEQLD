@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1430727157960.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "27635B3A",
+    "lastKnownWriteTime" : 7741240723082584096,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "subset(alltraits, leaf.area < 5)",
+        "contentUrl" : "content?title=subset(alltraits%2C+leaf.area+%3C+5)&file=2dd8c5b1119a4faca9c8acacc14f9411.htm",
+        "displayedObservations" : 14,
+        "displayedVariables" : 8,
+        "totalObservations" : 14,
+        "variables" : 7
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
