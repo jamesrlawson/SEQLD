@@ -1,4 +1,6 @@
-
+library(plyr)
+library(reshape2)
+library(FD)
 
 trim <- function(x) {
   gsub('\\s+', '',x)
