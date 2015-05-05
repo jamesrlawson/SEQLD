@@ -1,0 +1,17 @@
+{
+    "contents" : "hydrosites$SLA.CWM <- CWM$SLA\nhydrosites$seedmass.CWM <- CWM$seed.mass\nhydrosites$maxheight.CWM <- CWM$maximum.height\nhydrosites$flowering.duration.CWM <- CWM$flowering.duration\nhydrosites$WD.CWM <- CWM$wood.density\nhydrosites$leafarea.CWM <- CWM$leaf.area",
+    "created" : 1430802112868.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1671821564",
+    "id" : "804EE853",
+    "lastKnownWriteTime" : 1430801963,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

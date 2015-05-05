@@ -3,8 +3,11 @@ source("scripts/functions.R")
 alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
 vegSurveys <- read.csv("data/vegSurveys.csv", header=T)
+hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
 
 alltraits$X <- NULL
+
+alltraits <- na.omit(alltraits)
 
 # wrangling to convert transect counts -> site avg # per hectare
 
@@ -25,6 +28,7 @@ vegSurveys_all <- vegSurveys
 # find total cover in stems/Ha for each site
 
 vegSurveys.totalcover <- ddply(vegSurveys, .(site), summarise, totalcover = sum(avgPerHa, na.rm=TRUE))
+vegSurveys.totalcover <- vegSurveys.totalcover[-3,] # don't know why this row appears!
 
 vegSurveys <- merge(vegSurveys, vegSurveys.totalcover)
 
@@ -59,7 +63,8 @@ rm(Taxon)
 
 # calculate FD
 
-blah <- dbFD(alltraits, 
+
+FD <- dbFD(alltraits, 
              abun,
              w.abun = TRUE,  # use presence - absence converted data?
              stand.x = FALSE,
@@ -77,3 +82,30 @@ blah <- dbFD(alltraits,
              #                scale.RaoQ=TRUE, 
              #               stand.FRic=TRUE
 )
+
+
+# trait correlations
+
+cor(alltraits)
+alltraits.pca <- prcomp(alltraits, center=TRUE, scale=TRUE, retx=TRUE)
+summary(alltraits.pca)
+
+
+# hydrological gradient analysis
+
+
+hydrosites <- merge(hydro, sites, all.y=TRUE)
+hydrosites <- hydrosites[,4:37]
+
+hydrosites$FDis <- FD$FDis
+hydrosites$FDiv <- FD$FDiv
+hydrosites$FRic <- FD$FRic
+hydrosites$FEve <- FD$FEve
+hydrosites$RaoQ <- FD$RaoQ
+hydrosites$FGR <- FD$FGR
+
+getStats(hydrosites, hydrosites$FDis, FD)
+getStats(hydrosites, hydrosites$FDiv, FD)
+getStats(hydrosites, hydrosites$FRic, FD)
+getStats(hydrosites, hydrosites$FEve, FD)
+getStats(hydrosites, hydrosites$RaoQ, FD)
