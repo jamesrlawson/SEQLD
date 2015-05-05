@@ -5,6 +5,8 @@ library(reshape2)
 
 traits <- read.csv("data/traits/RF_trait_data2g.csv", header=T)
 
+levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names are properly capitalised
+
 ####### CLEAN SLA AND LMA DATA #######
 
 
@@ -239,6 +241,7 @@ length(unique(traits.flowering.duration$Taxon))
 ####### COMBINE TRAIT AVERAGES #######
 
   # find average trait values
+
   traits.SLA_avg <- ddply(traits.SLA, .(Taxon), summarise, avg = mean(SLA), CV = CV(SLA), n = length(SLA))
   traits.leafarea_avg <- ddply(traits.leafarea, .(Taxon), summarise, avg = mean(leaf.area), CV = CV(leaf.area), n = length(leaf.area))
   traits.WD_avg <- ddply(traits.WD, .(Taxon), summarise, avg = mean(wood.density), CV = CV(wood.density), n = length(wood.density))
@@ -264,14 +267,22 @@ length(unique(traits.flowering.duration$Taxon))
 
   alltraits <- dcast(alltraits, Taxon ~ trait, value.var = "avg", fill="NA")
 
+  # fix some type and formatting issues
+
   alltraits$SLA <- as.numeric(alltraits$SLA)
   alltraits$leaf.area <- as.numeric(alltraits$leaf.area)
   alltraits$wood.density <- as.numeric(alltraits$wood.density)
   alltraits$maximum.height <- as.numeric(alltraits$maximum.height)
   alltraits$seed.mass <- as.numeric(alltraits$seed.mass)
   alltraits$flowering.duration <- as.numeric(alltraits$flowering.duration)
+  alltraits$X <- NULL
 
-  write.csv(alltraits, "output/alltraits.csv")
+  alltraits$Taxon <- make.names(alltraits$Taxon) # replaces spaces in species names with points
 
+  #levels(alltraits$Taxon) <- capitalise(levels(alltraits$Taxon)) # make sure spp names are properly capitalised
+
+  write.csv(alltraits, "data/alltraits.csv")
+ 
+  rm(list = ls())
 
 
