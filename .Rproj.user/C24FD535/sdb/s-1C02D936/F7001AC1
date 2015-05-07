@@ -1,0 +1,17 @@
+{
+    "contents" : "hydro.pca <- prcomp(hydrosites[,1:34], center=TRUE, retx =TRUE, scale=TRUE)\n\nsummary(hydro.pca)\nbiplot(hydro.pca)\n\nj <- hydro.pca$x[,2]\n\n\nblah.lm <- lm(hydrosites$FDis ~ j)\n\nplot(hydrosites$FDis ~ j)\n\nsummary(blah.lm)\n\n\nhydro.pca$rotation[,1:4]\n",
+    "created" : 1430884942896.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "2333649546",
+    "id" : "F7001AC1",
+    "lastKnownWriteTime" : 3343191966503625072,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

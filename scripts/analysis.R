@@ -5,11 +5,37 @@ sites <- read.csv("data/sites.csv", header=T)
 vegSurveys <- read.csv("data/vegSurveys.csv", header=T)
 hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
 
+#alltraits$flowering.duration <- NULL
+#alltraits$seed.mass <- NULL
+#alltraits$wood.density <- NULL
+
+#alltraits <- na.omit(alltraits)
+
 alltraits$X <- NULL
 
-alltraits <- na.omit(alltraits)
+#blah <- missForest(alltraits[,2:7], maxiter = 100)
+#alltraits <- data.frame(cbind(alltraits[1], as.data.frame(blah[1])))
+#colnames(alltraits) <- c("Taxon", 
+#                         "flowering.duration",
+#                         "leaf.area",
+#                        "maximum.height",
+#                        "seed.mass",
+#                        "SLA",
+#                        "wood.density")
 
-# wrangling to convert transect counts -> site avg # per hectare
+#blah <- mice(alltraits[,2:7])
+#alltraits <- data.frame(cbind(alltraits[1], complete(blah)))
+
+#alltraits <- na.omit(alltraits)
+
+# normalise data
+
+#alltraits$SLA <- log10(alltraits$SLA)
+#alltraits$leaf.area <- sqrt(alltraits$leaf.area)
+#alltraits$seed.mass <- log10(alltraits$seed.mass)
+#alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
+
+# wide > long format
 
 vegSurveys <- melt(vegSurveys, id.vars = c("site", "transect", "transect.area"))
 
@@ -18,6 +44,14 @@ colnames(vegSurveys)[5] <- c("count")
 
 vegSurveys$Taxon <- as.factor(trim(vegSurveys$Taxon)) # trim white spaces
 levels(vegSurveys$Taxon) <- capitalise(levels(vegSurveys$Taxon)) # make sure spp names are properly capitalised
+
+# exclude species with less than x occurrences across the dataset
+
+abundance.allsites <- ddply(vegSurveys, .(Taxon), summarise, countSum = sum(count))
+vegSurveys.short <- subset(abundance.allsites, countSum > 5)
+vegSurveys <- vegSurveys[vegSurveys$Taxon %in% vegSurveys.short$Taxon, ]
+
+# convert transect counts -> site avg # per hectare
 
 vegSurveys$perHa <- vegSurveys$count * 10000 / vegSurveys$transect.area
 
@@ -32,12 +66,15 @@ vegSurveys.totalcover <- vegSurveys.totalcover[-3,] # don't know why this row ap
 
 vegSurveys <- merge(vegSurveys, vegSurveys.totalcover)
 
-vegSurveys <- merge(vegSurveys, alltraits, all.y=TRUE)
-#vegSurveys <- merge(vegSurveys, alltraits)
-
+#vegSurveys <- merge(vegSurveys, alltraits, all.y=TRUE)
+vegSurveys <- merge(vegSurveys, alltraits) 
 
 vegSurveys <- vegSurveys[order(vegSurveys$site),]
 
+# get only traits for species which are present in surveys (kind of circular code here, as this is also done for vegSurveys above)
+
+alltraits <- vegSurveys[!duplicated(vegSurveys[,c("Taxon")]),]
+alltraits <- data.frame(cbind(alltraits["Taxon"],alltraits[,5:10]))
 
 # find proportion of cover for which trait data is available
 
@@ -67,20 +104,20 @@ rm(Taxon)
 FD <- dbFD(alltraits, 
              abun,
              w.abun = TRUE,  # use presence - absence converted data?
-             stand.x = FALSE,
+             stand.x = TRUE,
              corr = c("cailliez"),
-             #                calc.FGR = TRUE, 
-             #                clust.type = c("kmeans"),
-             #                km.inf.gr = c(2),
-             #                km.sup.gr = c(10),
-             #                km.iter = (100),
-             #                calc.FDiv = TRUE, 
-             #                calc.FRic = TRUE,
+                             calc.FGR = TRUE, 
+                             clust.type = c("kmeans"),
+                             km.inf.gr = c(2),
+                            km.sup.gr = c(10),
+                             km.iter = (100),
+                             calc.FDiv = TRUE, 
+                             calc.FRic = TRUE,
              m = "max",
              calc.CWM=TRUE, 
              print.pco=TRUE, 
-             #                scale.RaoQ=TRUE, 
-             #               stand.FRic=TRUE
+                             scale.RaoQ=TRUE, 
+                            stand.FRic=TRUE
 )
 
 
@@ -104,8 +141,28 @@ hydrosites$FEve <- FD$FEve
 hydrosites$RaoQ <- FD$RaoQ
 hydrosites$FGR <- FD$FGR
 
+CWM <- FD$CWM
+
+hydrosites$SLA<- CWM$SLA
+hydrosites$seed.mass <- CWM$seed.mass
+hydrosites$maximum.height <- CWM$maximum.height
+hydrosites$flowering.duration <- CWM$flowering.duration
+hydrosites$wood.density <- CWM$wood.density
+hydrosites$leaf.area <- CWM$leaf.area
+
 getStats(hydrosites, hydrosites$FDis, FD)
 getStats(hydrosites, hydrosites$FDiv, FD)
 getStats(hydrosites, hydrosites$FRic, FD)
 getStats(hydrosites, hydrosites$FEve, FD)
 getStats(hydrosites, hydrosites$RaoQ, FD)
+
+getStats(hydrosites, hydrosites$SLA, CWM)
+getStats(hydrosites, hydrosites$seed.mass, CWM)
+getStats(hydrosites, hydrosites$maximum.height, CWM)
+getStats(hydrosites, hydrosites$flowering.duration, CWM)
+getStats(hydrosites, hydrosites$wood.density, CWM)
+getStats(hydrosites, hydrosites$leaf.area, CWM)
+
+
+
+plot.linear(hydrosites, hydrosites$FDis, FD)
