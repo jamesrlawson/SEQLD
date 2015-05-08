@@ -3,7 +3,7 @@ source("scripts/functions.R")
 library(plyr)
 library(reshape2)
 
-traits <- read.csv("data/traits/RF_trait_data2h.csv", header=T)
+traits <- read.csv("data/traits/RF_trait_data2i.csv", header=T)
 
 levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names are properly capitalised
 

@@ -1,4 +1,13 @@
 source("scripts/functions.R")
+#source("scripts/trait_cleaning.R")
+
+library(plyr)
+library(reshape2)
+library(reshape)
+library(FD)
+library(ggplot2)
+library(missForest)
+library(mice)
 
 alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
@@ -13,11 +22,11 @@ hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
 
 alltraits$X <- NULL
 
-#blah <- missForest(alltraits[,2:7], maxiter = 100)
+#blah <- missForest(alltraits[,2:7], maxiter = 100, verbose =TRUE)
 #alltraits <- data.frame(cbind(alltraits[1], as.data.frame(blah[1])))
 #colnames(alltraits) <- c("Taxon", 
 #                         "flowering.duration",
-#                         "leaf.area",
+#                        "leaf.area",
 #                        "maximum.height",
 #                        "seed.mass",
 #                        "SLA",
@@ -62,7 +71,7 @@ vegSurveys_all <- vegSurveys
 # find total cover in stems/Ha for each site
 
 vegSurveys.totalcover <- ddply(vegSurveys, .(site), summarise, totalcover = sum(avgPerHa, na.rm=TRUE))
-vegSurveys.totalcover <- vegSurveys.totalcover[-3,] # don't know why this row appears!
+#vegSurveys.totalcover <- vegSurveys.totalcover[-3,] # don't know why this row appears!
 
 vegSurveys <- merge(vegSurveys, vegSurveys.totalcover)
 
@@ -76,6 +85,24 @@ vegSurveys <- vegSurveys[order(vegSurveys$site),]
 alltraits <- vegSurveys[!duplicated(vegSurveys[,c("Taxon")]),]
 alltraits <- data.frame(cbind(alltraits["Taxon"],alltraits[,5:10]))
 
+
+
+## NEED TO IMPUTE HERE, BUT BE CAREFUL NOT TO IMPUTE MAXHEIGHTS FOR VINES, OR WOOD DENSITY FOR HERBACEOUS SPP.
+
+
+
+#blah <- missForest(alltraits[,2:7], maxiter = 100, verbose =TRUE)
+#alltraits <- data.frame(cbind(alltraits[1], as.data.frame(blah[1])))
+#colnames(alltraits) <- c("Taxon", 
+#                         "flowering.duration",
+#                         "leaf.area",
+#                         "maximum.height",
+#                         "seed.mass",
+#                         "SLA",
+#                         "wood.density")
+
+
+
 # find proportion of cover for which trait data is available
 
 vegSurveys.representedcover  <- merge(ddply(vegSurveys, .(site), summarise, representedcover = sum(avgPerHa, na.rm=TRUE)),
@@ -88,7 +115,7 @@ abun <- cast(vegSurveys, site ~ Taxon, value="avgPerHa", fill=0)
 
 
 abun <- abun[order(abun$site),]
-abun <- abun[-46,] 
+#abun <- abun[-46,] 
 abun$site <- NULL
 abun <- data.frame(abun)
 
@@ -96,6 +123,8 @@ Taxon <- alltraits$Taxon
 alltraits$Taxon <- NULL
 rownames(alltraits) <- Taxon # dbFD requires this format
 rm(Taxon)
+
+
 
 
 # calculate FD
@@ -106,11 +135,11 @@ FD <- dbFD(alltraits,
              w.abun = TRUE,  # use presence - absence converted data?
              stand.x = TRUE,
              corr = c("cailliez"),
-                             calc.FGR = TRUE, 
-                             clust.type = c("kmeans"),
-                             km.inf.gr = c(2),
-                            km.sup.gr = c(10),
-                             km.iter = (100),
+ #                            calc.FGR = TRUE, 
+#                             clust.type = c("kmeans"),
+ #                            km.inf.gr = c(2),
+  #                          km.sup.gr = c(10),
+   #                          km.iter = (100),
                              calc.FDiv = TRUE, 
                              calc.FRic = TRUE,
              m = "max",
@@ -165,4 +194,4 @@ getStats(hydrosites, hydrosites$leaf.area, CWM)
 
 
 
-plot.linear(hydrosites, hydrosites$FDis, FD)
+#plot.linear(hydrosites, hydrosites$FDis, FD)

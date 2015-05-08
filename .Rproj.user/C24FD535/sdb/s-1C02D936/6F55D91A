@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1431072236219.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6F55D91A",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "abun",
+        "contentUrl" : "content?title=abun&file=5da96a615b8943cb8df0d610bb5fe138.htm",
+        "displayedObservations" : "44",
+        "displayedVariables" : 100,
+        "totalObservations" : "44",
+        "variables" : "214"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

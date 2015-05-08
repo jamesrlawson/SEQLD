@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1431063601821.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2494F2C1",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "alltraits",
+        "contentUrl" : "content?title=alltraits&file=066d2845dfee44a8b47542e047b360d3.htm",
+        "displayedObservations" : "125",
+        "displayedVariables" : 7,
+        "totalObservations" : "125",
+        "variables" : "7"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
