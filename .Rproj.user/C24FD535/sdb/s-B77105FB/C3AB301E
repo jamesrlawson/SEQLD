@@ -1,0 +1,17 @@
+{
+    "contents" : "require(FD)\nrequire(reshape)\nrequire(vegan)\n\nhydro_to1999 <- read.csv(\"data/hydro_1975-1999.csv\")\nhydro_IQQM <- read.csv(\"data/hydro_IQQM.csv\")\n\n# remove Teviot @ Croftby and Burnett at U/S Maroon Dam, as neither have IQQM correlates\n\nhydro_to1999a <- hydro_to1999[-16,]\nhydro_to1999a <- hydro_to1999a[-15,]\n#hydro_IQQMa <- hydro_IQQM[-17,]\n#hydro_IQQMa <- hydro_IQQM[-15,]\n\nhydro_compare <- rbind(hydro_to1999a, hydro_IQQM)\n\nblah <- hydro_compare[order(hydro_compare$gaugeID),] \nblah <- hydro_compare[1:40,]\nrownames(blah) <- blah$gaugeName\nblah <- blah[,3:36]\nblah.dis <- vegdist(blah, method=\"gower\")\n#blah.dis <- daisy(blah, metric=\"manhattan\", stand=TRUE)\nView(as.matrix(blah.dis))\n\nwrite.csv(as.matrix(blah.dis), file=\"gower.csv\")\n\n\nblah <- subset(hydro_compare, gaugeID == \"138001A\")\nblah <- rbind(blah, subset(hydro_compare, gaugeID == \"138004AB\"))\nblah <- rbind(blah, subset(hydro_compare, gaugeID == \"145099A\"))\n\nblahx <- blah[,3:36]\n#blahx <- data.frame(t(blahx))\nblahx.gowdis <- vegdist(blahx, method=\"gower\")\nblahx.man <- daisy(blahx, metric=\"manhattan\", stand=TRUE)\nblahx.gowdis\n\nblahx.dis <- daisy(blahx, metric = \"euclidean\", stand = TRUE)\nblahx.dis\n",
+    "created" : 1431314347821.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3233788468",
+    "id" : "C3AB301E",
+    "lastKnownWriteTime" : 1430092470,
+    "path" : "C:/Users/James/Desktop/stuff/data/analysis/R/SEQLD/scripts/hydro_analysis.R",
+    "project_path" : "scripts/hydro_analysis.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

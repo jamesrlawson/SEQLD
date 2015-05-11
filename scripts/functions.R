@@ -97,6 +97,28 @@ capitalise <- function(x){
 }
 
 
+missing <- function(df) { # finds number of NA values in each row
+  
+  df$missing <- c(1)
+  
+  for(i in 1:nrow(df)) {    
+    
+    zap <- as.numeric(df[i,])
+    
+    zap.length <- length(zap[is.na(zap)])
+    
+    df$missing[i] <- zap.length
+    
+  }
+  
+  return(df)
+  
+}
+
+
+
+
+
 ###### PLOTTING #######
 
 plot.linear <- function(df, var, trait) { # var is alphaT/betaT/ts/Rs, etc.

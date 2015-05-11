@@ -3,7 +3,7 @@ source("scripts/functions.R")
 library(plyr)
 library(reshape2)
 
-traits <- read.csv("data/traits/RF_trait_data2i.csv", header=T)
+traits <- read.csv("data/traits/RF_trait_data2j.csv", header=T)
 
 levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names are properly capitalised
 
@@ -155,14 +155,14 @@ levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names a
   
   traits.maxheight.vines <- traits.maxheight[traits.maxheight$Taxon %in% vines$Taxon, ]
   
-  write.csv(traits.maxheight.vines, "maxheight_vines.csv")
+  write.csv(traits.maxheight.vines, "output/maxheight_vines.csv")
 
   # remove vine data from maxheight
 
-  traits.maxheight_sansvines <- merge(traits.maxheight, vines, all.x = TRUE)
-  traits.maxheight_sansvines <- subset(traits.maxheight_sansvines, is.na(vine))
+  #traits.maxheight_sansvines <- merge(traits.maxheight, vines, all.x = TRUE)
+  #traits.maxheight_sansvines <- subset(traits.maxheight_sansvines, is.na(vine))
 
-  write.csv(traits.maxheight_sansvines, "output/traits_maxheight.csv")
+ # write.csv(traits.maxheight_sansvines, "output/traits_maxheight.csv")
 
 ####### CLEAN SEED MASS DATA #######
 
@@ -245,7 +245,9 @@ length(unique(traits.flowering.duration$Taxon))
   traits.SLA_avg <- ddply(traits.SLA, .(Taxon), summarise, avg = mean(SLA), CV = CV(SLA), n = length(SLA))
   traits.leafarea_avg <- ddply(traits.leafarea, .(Taxon), summarise, avg = mean(leaf.area), CV = CV(leaf.area), n = length(leaf.area))
   traits.WD_avg <- ddply(traits.WD, .(Taxon), summarise, avg = mean(wood.density), CV = CV(wood.density), n = length(wood.density))
-  traits.maxheight_avg <- ddply(traits.maxheight_sansvines, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
+#  traits.maxheight_avg <- ddply(traits.maxheight_sansvines, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
+  traits.maxheight_avg <- ddply(traits.maxheight, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
+
   traits.seedmass_avg <- ddply(traits.seedmass, .(Taxon), summarise, avg = mean(seed.mass), CV = CV(seed.mass), n = length(seed.mass))
   traits.flowering.duration_avg <- ddply(traits.flowering.duration, .(Taxon), summarise, avg = mean(flowering.duration), CV = CV(flowering.duration), n = length(flowering.duration))
   

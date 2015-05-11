@@ -57,7 +57,7 @@ levels(vegSurveys$Taxon) <- capitalise(levels(vegSurveys$Taxon)) # make sure spp
 # exclude species with less than x occurrences across the dataset
 
 abundance.allsites <- ddply(vegSurveys, .(Taxon), summarise, countSum = sum(count))
-vegSurveys.short <- subset(abundance.allsites, countSum > 5)
+vegSurveys.short <- subset(abundance.allsites, countSum > 10)
 vegSurveys <- vegSurveys[vegSurveys$Taxon %in% vegSurveys.short$Taxon, ]
 
 # convert transect counts -> site avg # per hectare
@@ -129,25 +129,25 @@ rm(Taxon)
 
 # calculate FD
 
-
 FD <- dbFD(alltraits, 
-             abun,
-             w.abun = TRUE,  # use presence - absence converted data?
-             stand.x = TRUE,
-             corr = c("cailliez"),
- #                            calc.FGR = TRUE, 
-#                             clust.type = c("kmeans"),
- #                            km.inf.gr = c(2),
-  #                          km.sup.gr = c(10),
-   #                          km.iter = (100),
-                             calc.FDiv = TRUE, 
-                             calc.FRic = TRUE,
-             m = "max",
-             calc.CWM=TRUE, 
-             print.pco=TRUE, 
-                             scale.RaoQ=TRUE, 
-                            stand.FRic=TRUE
+                abun,
+                w.abun = TRUE,  
+                stand.x = TRUE,
+                corr = c("cailliez"),
+                #                calc.FGR = TRUE, 
+                #                clust.type = c("kmeans"),
+                #                km.inf.gr = c(2),
+                #                km.sup.gr = c(10),
+                #                km.iter = (100),
+                #                calc.FDiv = TRUE, 
+                #                calc.FRic = TRUE,
+                m = "max",
+                calc.CWM=TRUE, 
+                print.pco=TRUE, 
+                #                scale.RaoQ=TRUE, 
+                #               stand.FRic=TRUE
 )
+
 
 
 # trait correlations
