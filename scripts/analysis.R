@@ -8,6 +8,8 @@ library(FD)
 library(ggplot2)
 library(missForest)
 library(mice)
+library(SYNCSA)
+
 
 alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
@@ -22,6 +24,10 @@ hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
 
 alltraits$X <- NULL
 
+alltraits <- missing(alltraits)
+alltraits <- subset(alltraits, missing <3) # only keep species with less than 3 NA trait values
+alltraits$missing <- NULL
+
 #blah <- missForest(alltraits[,2:7], maxiter = 100, verbose =TRUE)
 #alltraits <- data.frame(cbind(alltraits[1], as.data.frame(blah[1])))
 #colnames(alltraits) <- c("Taxon", 
@@ -32,17 +38,21 @@ alltraits$X <- NULL
 #                        "SLA",
 #                        "wood.density")
 
-#blah <- mice(alltraits[,2:7])
-#alltraits <- data.frame(cbind(alltraits[1], complete(blah)))
+# normalise data
+
+alltraits$SLA <- log10(alltraits$SLA)
+alltraits$leaf.area <- sqrt(alltraits$leaf.area)
+alltraits$seed.mass <- log10(alltraits$seed.mass)
+alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
+alltraits$maximum.height <- sqrt(alltraits$maximum.height)
+
+
+blah <- mice(alltraits[,2:7])
+alltraits.imputed <- data.frame(cbind(alltraits[1], complete(blah)))
+alltraits <- data.frame(cbind(alltraits.imputed[,1:6], alltraits["wood.density"]))
 
 #alltraits <- na.omit(alltraits)
 
-# normalise data
-
-#alltraits$SLA <- log10(alltraits$SLA)
-#alltraits$leaf.area <- sqrt(alltraits$leaf.area)
-#alltraits$seed.mass <- log10(alltraits$seed.mass)
-#alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
 
 # wide > long format
 
@@ -57,7 +67,7 @@ levels(vegSurveys$Taxon) <- capitalise(levels(vegSurveys$Taxon)) # make sure spp
 # exclude species with less than x occurrences across the dataset
 
 abundance.allsites <- ddply(vegSurveys, .(Taxon), summarise, countSum = sum(count))
-vegSurveys.short <- subset(abundance.allsites, countSum > 10)
+vegSurveys.short <- subset(abundance.allsites, countSum > 5)
 vegSurveys <- vegSurveys[vegSurveys$Taxon %in% vegSurveys.short$Taxon, ]
 
 # convert transect counts -> site avg # per hectare
@@ -130,38 +140,50 @@ rm(Taxon)
 # calculate FD
 
 FD <- dbFD(alltraits, 
-                abun,
-                w.abun = TRUE,  
-                stand.x = TRUE,
-                corr = c("cailliez"),
-                #                calc.FGR = TRUE, 
-                #                clust.type = c("kmeans"),
-                #                km.inf.gr = c(2),
-                #                km.sup.gr = c(10),
-                #                km.iter = (100),
-                #                calc.FDiv = TRUE, 
-                #                calc.FRic = TRUE,
-                m = "max",
-                calc.CWM=TRUE, 
-                print.pco=TRUE, 
-                #                scale.RaoQ=TRUE, 
-                #               stand.FRic=TRUE
+           abun,
+           w.abun = FALSE,  
+           stand.x = TRUE,
+           corr = c("cailliez"),
+           #                calc.FGR = TRUE, 
+           #                clust.type = c("kmeans"),
+           #                km.inf.gr = c(2),
+           #                km.sup.gr = c(10),
+           #                km.iter = (100),
+           #                calc.FDiv = TRUE, 
+           #                calc.FRic = TRUE,
+           m = "max",
+           calc.CWM=TRUE, 
+           print.pco=TRUE, 
+           #                scale.RaoQ=TRUE, 
+           #                stand.FRic=TRUE
 )
+
+
+FD.redun <- rao.diversity(abun, traits=alltraits)
+
 
 
 
 # trait correlations
 
-cor(alltraits)
-alltraits.pca <- prcomp(alltraits, center=TRUE, scale=TRUE, retx=TRUE)
-summary(alltraits.pca)
+#cor(alltraits)
+#alltraits.pca <- prcomp(alltraits, center=TRUE, scale=TRUE, retx=TRUE)
+#summary(alltraits.pca)
 
 
 # hydrological gradient analysis
 
+hydro <- subset(hydro, gaugeID != c("138001A"))
+
+
+hydro.pca <- prcomp(hydro[,4:37], retx = TRUE, center = TRUE, scale. = TRUE)
+hydro$PC1 <- hydro.pca$x[,1]
+hydro$PC2 <- hydro.pca$x[,2]
+hydro$PC3 <- hydro.pca$x[,3]
+hydro$PC4 <- hydro.pca$x[,4]
 
 hydrosites <- merge(hydro, sites, all.y=TRUE)
-hydrosites <- hydrosites[,4:37]
+hydrosites <- hydrosites[,4:41]
 
 hydrosites$FDis <- FD$FDis
 hydrosites$FDiv <- FD$FDiv
@@ -169,6 +191,11 @@ hydrosites$FRic <- FD$FRic
 hydrosites$FEve <- FD$FEve
 hydrosites$RaoQ <- FD$RaoQ
 hydrosites$FGR <- FD$FGR
+hydrosites$nbsp <- FD$nbsp
+hydrosites$simpson <- FD.redun$Simpson
+hydrosites$FunRao <- FD.redun$FunRao
+hydrosites$redun <- FD.redun$FunRedundancy
+hydrosites$nbsp <- FD$nbsp
 
 CWM <- FD$CWM
 
@@ -184,14 +211,21 @@ getStats(hydrosites, hydrosites$FDiv, FD)
 getStats(hydrosites, hydrosites$FRic, FD)
 getStats(hydrosites, hydrosites$FEve, FD)
 getStats(hydrosites, hydrosites$RaoQ, FD)
-
-getStats(hydrosites, hydrosites$SLA, CWM)
-getStats(hydrosites, hydrosites$seed.mass, CWM)
-getStats(hydrosites, hydrosites$maximum.height, CWM)
-getStats(hydrosites, hydrosites$flowering.duration, CWM)
-getStats(hydrosites, hydrosites$wood.density, CWM)
-getStats(hydrosites, hydrosites$leaf.area, CWM)
+getStats(hydrosites, hydrosites$nbsp, FD)
 
 
+getStats(hydrosites, hydrosites$simpson, FD)
+getStats(hydrosites, hydrosites$FunRao, FD)
+getStats(hydrosites, hydrosites$redun, FD)
 
-#plot.linear(hydrosites, hydrosites$FDis, FD)
+
+#getStats(hydrosites, hydrosites$SLA, CWM)
+#getStats(hydrosites, hydrosites$seed.mass, CWM)
+#getStats(hydrosites, hydrosites$maximum.height, CWM)
+#getStats(hydrosites, hydrosites$flowering.duration, CWM)
+#getStats(hydrosites, hydrosites$wood.density, CWM)
+#getStats(hydrosites, hydrosites$leaf.area, CWM)
+
+
+
+plot.linear(hydrosites, hydrosites$FRic, FD)

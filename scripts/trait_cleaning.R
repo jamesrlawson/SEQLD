@@ -62,7 +62,9 @@ levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names a
   
   write.csv(traits.SLA, "output/traits_SLA.csv")
   write.csv(dodgy.SLA, "output/dodgy_SLA.csv")
-
+  
+  traits.SLA$Taxon <- as.character(traits.SLA$Taxon)
+  traits.SLA$Taxon <- as.factor(traits.SLA$Taxon)
 
   # identify SLA records only available in the TRY database (52, see top of section)
 
@@ -106,6 +108,9 @@ levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names a
   write.csv(traits.leafarea, "output/traits_leafarea.csv")
   write.csv(dodgy.leafarea, "output/dodgy_leafarea.csv")
 
+traits.leafarea$Taxon <- as.character(traits.leafarea$Taxon)
+traits.leafarea$Taxon <- as.factor(traits.leafarea$Taxon)
+
 # identify SLA records only available in the TRY database (52, see top of section)
 
 ####### CLEAN WOOD DENSITY DATA ######
@@ -136,6 +141,9 @@ levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names a
   
   write.csv(traits.WD, "output/traits_wooddensity.csv")
   write.csv(dodgy.wood.density, "output/dodgy_wooddensity.csv")
+
+traits.WD$Taxon <- as.character(traits.WD$Taxon)
+traits.WD$Taxon <- as.factor(traits.WD$Taxon)
   
   # identify WD records only available in the TRY database (52, see top of section)
 
@@ -164,6 +172,9 @@ levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names a
 
  # write.csv(traits.maxheight_sansvines, "output/traits_maxheight.csv")
 
+traits.maxheight$Taxon <- as.character(traits.maxheight$Taxon)
+traits.maxheight$Taxon <- as.factor(traits.maxheight$Taxon)
+
 ####### CLEAN SEED MASS DATA #######
 
   traits.seedmass <- cbind(traits["Taxon"],traits["seed.mass"],traits["source"])
@@ -171,6 +182,7 @@ levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names a
   traits.seedmass <- na.omit(traits.seedmass[!duplicated(traits.seedmass[,c("Taxon","seed.mass")]),])
   traits.seedmass <- traits.seedmass[order(traits.seedmass$Taxon),]
   
+
 
 ####### IMPUTE SEED MASSES FROM SEED VOLUME AND MERGE WITH SEEDMASS DATA #######
   
@@ -227,6 +239,9 @@ levels(traits$Taxon) <- capitalise(levels(traits$Taxon)) # make sure spp names a
         # AUSTRAITS_DATABASE49 seems to be responsible for a lot of records that are out by a factor of 10.
         # not all of the values from 49 are out of whack though, so bulk multiplication is not possible
 
+traits.seedmass$Taxon <- as.character(traits.seedmass$Taxon)
+traits.seedmass$Taxon <- as.factor(traits.seedmass$Taxon)
+
 ####### CLEAN FLOWERING TIME DATA #######
 
 # flowering times have been reworked manually. will need to add more data from flora later.
@@ -238,6 +253,21 @@ traits.flowering.duration <- na.omit(traits.flowering.duration)
 
 length(unique(traits.flowering.duration$Taxon))
 
+traits.flowering.duration$Taxon <- as.character(traits.flowering.duration$Taxon)
+traits.flowering.duration$Taxon <- as.factor(traits.flowering.duration$Taxon)
+
+####### CALCULATE LEAF NARROWNESS #######
+
+traits.leaf.narrowness <- as.data.frame(cbind(traits["Taxon"], 
+                                             traits["leaf.length"], 
+                                             traits["leaf.width"],
+                                             traits["source"]))
+traits.leaf.narrowness <- na.omit(traits.leaf.narrowness)
+traits.leaf.narrowness$leaf.narrowness <- traits.leaf.narrowness$leaf.length / traits.leaf.narrowness$leaf.width
+
+traits.leaf.narrowness$Taxon <- as.character(traits.leaf.narrowness$Taxon)
+traits.leaf.narrowness$Taxon <- as.factor(traits.leaf.narrowness$Taxon)
+
 ####### COMBINE TRAIT AVERAGES #######
 
   # find average trait values
@@ -247,16 +277,17 @@ length(unique(traits.flowering.duration$Taxon))
   traits.WD_avg <- ddply(traits.WD, .(Taxon), summarise, avg = mean(wood.density), CV = CV(wood.density), n = length(wood.density))
 #  traits.maxheight_avg <- ddply(traits.maxheight_sansvines, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
   traits.maxheight_avg <- ddply(traits.maxheight, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
-
   traits.seedmass_avg <- ddply(traits.seedmass, .(Taxon), summarise, avg = mean(seed.mass), CV = CV(seed.mass), n = length(seed.mass))
   traits.flowering.duration_avg <- ddply(traits.flowering.duration, .(Taxon), summarise, avg = mean(flowering.duration), CV = CV(flowering.duration), n = length(flowering.duration))
-  
+#  traits.leaf.narrowness_avg <- ddply(traits.leaf.narrowness, .(Taxon), summarise, avg = mean(leaf.narrowness), CV = CV(leaf.narrowness), n = length(leaf.narrowness))
+
   traits.SLA_avg$trait <- c("SLA")
   traits.leafarea_avg$trait <- c("leaf.area")
   traits.WD_avg$trait <- c("wood.density")
   traits.maxheight_avg$trait <- c("maximum.height")
   traits.seedmass_avg$trait <- c("seed.mass")
   traits.flowering.duration_avg$trait <- c("flowering.duration")
+#  traits.leaf.narrowness_avg$trait <- c("leaf.narrowness")
 
   # combine and transform from long to wide format
 
@@ -265,7 +296,11 @@ length(unique(traits.flowering.duration$Taxon))
                      traits.WD_avg,
                      traits.maxheight_avg,
                      traits.seedmass_avg,
-                     traits.flowering.duration_avg)
+                     traits.flowering.duration_avg)#,
+ #                    traits.leaf.narrowness_avg)
+
+  #alltraits$Taxon <- as.character(alltraits$Taxon)
+  #alltraits$Taxon <- as.factor(alltraits$Taxon)
 
   alltraits <- dcast(alltraits, Taxon ~ trait, value.var = "avg", fill="NA")
 
@@ -277,6 +312,8 @@ length(unique(traits.flowering.duration$Taxon))
   alltraits$maximum.height <- as.numeric(alltraits$maximum.height)
   alltraits$seed.mass <- as.numeric(alltraits$seed.mass)
   alltraits$flowering.duration <- as.numeric(alltraits$flowering.duration)
+#  alltraits$leaf.narrowness <- as.numeric(alltraits$leaf.narrowness)
+
   alltraits$X <- NULL
 
   alltraits$Taxon <- make.names(alltraits$Taxon) # replaces spaces in species names with points

@@ -15,6 +15,11 @@ alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
 vegSurveys <- read.csv("data/vegSurveys.csv", header=T)
 hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
+leaf.narrowness <- read.csv("data/traits/leafnarrowness.csv", header=T)
+
+alltraits <- merge(alltraits, leaf.narrowness, all.x=TRUE)
+
+alltraits$leaf.area <- NULL
 
 #alltraits$flowering.duration <- NULL
 #alltraits$seed.mass <- NULL
@@ -41,7 +46,7 @@ alltraits$missing <- NULL
 # normalise data
 
 alltraits$SLA <- log10(alltraits$SLA)
-alltraits$leaf.area <- sqrt(alltraits$leaf.area)
+#alltraits$leaf.area <- sqrt(alltraits$leaf.area)
 alltraits$seed.mass <- log10(alltraits$seed.mass)
 alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
 alltraits$maximum.height <- sqrt(alltraits$maximum.height)
@@ -49,7 +54,10 @@ alltraits$maximum.height <- sqrt(alltraits$maximum.height)
 
 blah <- mice(alltraits[,2:7])
 alltraits.imputed <- data.frame(cbind(alltraits[1], complete(blah)))
-alltraits <- data.frame(cbind(alltraits.imputed[,1:6], alltraits["wood.density"]))
+alltraits <- data.frame(cbind(alltraits.imputed[,1:6], alltraits["leaf.narrowness"],alltraits["wood.density"]))
+alltraits$wood.density <- NULL
+alltraits$wood.density <- alltraits$wood.density.1
+alltraits$wood.density.1 <- NULL
 
 #alltraits <- na.omit(alltraits)
 
@@ -141,7 +149,7 @@ rm(Taxon)
 
 FD <- dbFD(alltraits, 
            abun,
-           w.abun = FALSE,  
+           w.abun = TRUE,  
            stand.x = TRUE,
            corr = c("cailliez"),
            #                calc.FGR = TRUE, 
@@ -228,4 +236,4 @@ getStats(hydrosites, hydrosites$redun, FD)
 
 
 
-plot.linear(hydrosites, hydrosites$FRic, FD)
+#plot.linear(hydrosites, hydrosites$FRic, FD)
