@@ -15,11 +15,13 @@ alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
 vegSurveys <- read.csv("data/vegSurveys.csv", header=T)
 hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
-leaf.narrowness <- read.csv("data/traits/leafnarrowness.csv", header=T)
+source_GF <- read.csv("data/source_growthForm.csv", header=T)
 
-#alltraits <- merge(alltraits, leaf.narrowness, all.x=TRUE)
+alltraits <- merge(alltraits, source_GF, all.x=TRUE)
 
-#alltraits$leaf.area <- NULL
+#alltraits <- subset(alltraits, source != "exotic")
+
+#alltraits$source <- NULL
 
 
 #alltraits <- na.omit(alltraits)
@@ -117,7 +119,7 @@ vegSurveys <- vegSurveys[order(vegSurveys$site),]
 # get only traits for species which are present in surveys (kind of circular code here, as this is also done for vegSurveys above)
 
 alltraits <- vegSurveys[!duplicated(vegSurveys[,c("Taxon")]),]
-alltraits <- data.frame(cbind(alltraits["Taxon"],alltraits[,5:10]))
+alltraits <- data.frame(cbind(alltraits["Taxon"],alltraits[,5:11]))
 
 
 
@@ -153,6 +155,7 @@ abun <- abun[order(abun$site),]
 abun$site <- NULL
 abun <- data.frame(abun)
 
+
 Taxon <- alltraits$Taxon 
 alltraits$Taxon <- NULL
 rownames(alltraits) <- Taxon # dbFD requires this format
@@ -165,7 +168,7 @@ write.csv(alltraits, "output/alltraits_max2.csv")
 
 FD <- dbFD(alltraits, 
            abun,
-           w.abun = FALSE,  
+           w.abun = TRUE,  
            stand.x = TRUE,
            corr = c("cailliez"),
            #                calc.FGR = TRUE, 
@@ -239,13 +242,13 @@ getStats(hydrosites, hydrosites$FDiv, FD)
 getStats(hydrosites, hydrosites$FRic, FD)
 getStats(hydrosites, hydrosites$FEve, FD)
 getStats(hydrosites, hydrosites$RaoQ, FD)
-getStats(hydrosites, hydrosites$nbsp, FD)
+#getStats(hydrosites, hydrosites$nbsp, FD)
 
-getStats(hydrosites, hydrosites$richness, FD)
+#getStats(hydrosites, hydrosites$richness, FD)
 
-getStats(hydrosites, hydrosites$simpson, FD)
-getStats(hydrosites, hydrosites$FunRao, FD)
-getStats(hydrosites, hydrosites$redun, FD)
+#getStats(hydrosites, hydrosites$simpson, FD)
+#getStats(hydrosites, hydrosites$FunRao, FD)
+#getStats(hydrosites, hydrosites$redun, FD)
 
 
 #getStats(hydrosites, hydrosites$SLA, CWM)
@@ -254,7 +257,7 @@ getStats(hydrosites, hydrosites$redun, FD)
 #getStats(hydrosites, hydrosites$flowering.duration, CWM)
 #getStats(hydrosites, hydrosites$wood.density, CWM)
 #getStats(hydrosites, hydrosites$leaf.area, CWM)
-getStats(hydrosites, hydrosites$leaf.narrowness, CWM)
+#getStats(hydrosites, hydrosites$leaf.narrowness, CWM)
 
 
 
@@ -263,7 +266,7 @@ getStats(hydrosites, hydrosites$leaf.narrowness, CWM)
 #plot.linear(hydrosites, hydrosites$FEve, FD)
 
 #plot.quad(hydrosites, hydrosites$FDis, FD)
-plot.quad(hydrosites, hydrosites$FRic, FD)
+#plot.quad(hydrosites, hydrosites$FRic, FD)
 #plot.quad(hydrosites, hydrosites$FEve, FD)
 
 

@@ -15,28 +15,21 @@ alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
 vegSurveys <- read.csv("data/vegSurveys.csv", header=T)
 hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
+leaf.narrowness <- read.csv("data/traits/leafnarrowness.csv", header=T)
 
-#alltraits$flowering.duration <- NULL
-#alltraits$seed.mass <- NULL
-#alltraits$wood.density <- NULL
+#alltraits <- merge(alltraits, leaf.narrowness, all.x=TRUE)
+
+#alltraits$leaf.area <- NULL
+
 
 #alltraits <- na.omit(alltraits)
 
 alltraits$X <- NULL
 
 alltraits <- missing(alltraits)
-alltraits <- subset(alltraits, missing <3) # only keep species with less than 3 NA trait values
+alltraits <- subset(alltraits, missing <3) # only keep species with less than X NA trait values
 alltraits$missing <- NULL
 
-#blah <- missForest(alltraits[,2:7], maxiter = 100, verbose =TRUE)
-#alltraits <- data.frame(cbind(alltraits[1], as.data.frame(blah[1])))
-#colnames(alltraits) <- c("Taxon", 
-#                         "flowering.duration",
-#                        "leaf.area",
-#                        "maximum.height",
-#                        "seed.mass",
-#                        "SLA",
-#                        "wood.density")
 
 # normalise data
 
@@ -45,11 +38,34 @@ alltraits$leaf.area <- sqrt(alltraits$leaf.area)
 alltraits$seed.mass <- log10(alltraits$seed.mass)
 alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
 alltraits$maximum.height <- sqrt(alltraits$maximum.height)
+alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
+
+# impute missing data using either mice or missForests
+
+#imputed <- mice(alltraits[,2:7])
+#alltraits.imputed <- data.frame(cbind(alltraits[1], complete(imputed)))
+#alltraits <- data.frame(cbind(alltraits.imputed[,1:6], alltraits["leaf.narrowness"],alltraits["wood.density"]))
+#alltraits$wood.density <- NULL
+#alltraits$wood.density <- alltraits$wood.density.1
+#alltraits$wood.density.1 <- NULL
 
 
-blah <- mice(alltraits[,2:7])
-alltraits.imputed <- data.frame(cbind(alltraits[1], complete(blah)))
-alltraits <- data.frame(cbind(alltraits.imputed[,1:6], alltraits["wood.density"]))
+# imputed <- missForest(alltraits[,2:7], maxiter = 100, ntree= 100, verbose =TRUE, replace=TRUE, variablewise=TRUE)
+# alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
+# colnames(alltraits.imputed) <- c("Taxon", 
+#                         "flowering.duration",
+#                         "leaf.narrowness",
+#                        "maximum.height",
+#                        "seed.mass",
+#                         "SLA",
+#                         "wood.density")
+# alltraits.imputed$wood.density <- alltraits$wood.density
+# alltraits.imputed$leaf.narrowness <- alltraits$leaf.narrowness
+# alltraits.imputed$seed.mass <- alltraits$seed.mass
+# alltraits.imputed$maximum.height <- alltraits$seed.mass
+
+
+#alltraits <- alltraits.imputed
 
 #alltraits <- na.omit(alltraits)
 
@@ -64,11 +80,19 @@ colnames(vegSurveys)[5] <- c("count")
 vegSurveys$Taxon <- as.factor(trim(vegSurveys$Taxon)) # trim white spaces
 levels(vegSurveys$Taxon) <- capitalise(levels(vegSurveys$Taxon)) # make sure spp names are properly capitalised
 
-# exclude species with less than x occurrences across the dataset
+# find unmodified species richness
 
-abundance.allsites <- ddply(vegSurveys, .(Taxon), summarise, countSum = sum(count))
-vegSurveys.short <- subset(abundance.allsites, countSum > 5)
-vegSurveys <- vegSurveys[vegSurveys$Taxon %in% vegSurveys.short$Taxon, ]
+richness <- ddply(vegSurveys, .(site, Taxon), summarise, sum = sum(count))
+richness$sum[richness$sum>0] <- 1 # convert counts to presabs
+richness <- ddply(richness, .(site), summarise, richness = sum(sum))
+
+# include only species with more than X occurrences at any site
+
+#vegSurveys$site <- as.factor(vegSurveys$site)
+#abundance <- ddply(vegSurveys, .(Taxon, site), summarise, countSum = sum(count))
+#vegSurveys.short <- ddply(abundance,  .(Taxon), summarise, maxCount = max(countSum))
+#vegSurveys.short <- subset(vegSurveys.short, maxCount > 1) # insert X here
+#vegSurveys <- vegSurveys[vegSurveys$Taxon %in% vegSurveys.short$Taxon, ]
 
 # convert transect counts -> site avg # per hectare
 
@@ -135,7 +159,7 @@ rownames(alltraits) <- Taxon # dbFD requires this format
 rm(Taxon)
 
 
-
+write.csv(alltraits, "output/alltraits_max2.csv")
 
 # calculate FD
 
@@ -149,13 +173,13 @@ FD <- dbFD(alltraits,
            #                km.inf.gr = c(2),
            #                km.sup.gr = c(10),
            #                km.iter = (100),
-           #                calc.FDiv = TRUE, 
-           #                calc.FRic = TRUE,
+           calc.FDiv = TRUE, 
+           calc.FRic = TRUE,
            m = "max",
            calc.CWM=TRUE, 
            print.pco=TRUE, 
-           #                scale.RaoQ=TRUE, 
-           #                stand.FRic=TRUE
+           #                      scale.RaoQ=TRUE, 
+           stand.FRic=TRUE
 )
 
 
@@ -173,7 +197,7 @@ FD.redun <- rao.diversity(abun, traits=alltraits)
 
 # hydrological gradient analysis
 
-hydro <- subset(hydro, gaugeID != c("138001A"))
+#hydro <- subset(hydro, gaugeID != c("138001A"))
 
 
 hydro.pca <- prcomp(hydro[,4:37], retx = TRUE, center = TRUE, scale. = TRUE)
@@ -197,6 +221,8 @@ hydrosites$FunRao <- FD.redun$FunRao
 hydrosites$redun <- FD.redun$FunRedundancy
 hydrosites$nbsp <- FD$nbsp
 
+hydrosites$richness <- richness$richness
+
 CWM <- FD$CWM
 
 hydrosites$SLA<- CWM$SLA
@@ -204,7 +230,9 @@ hydrosites$seed.mass <- CWM$seed.mass
 hydrosites$maximum.height <- CWM$maximum.height
 hydrosites$flowering.duration <- CWM$flowering.duration
 hydrosites$wood.density <- CWM$wood.density
-hydrosites$leaf.area <- CWM$leaf.area
+#hydrosites$leaf.area <- CWM$leaf.area
+hydrosites$leaf.narrowness<- CWM$leaf.narrowness
+
 
 getStats(hydrosites, hydrosites$FDis, FD)
 getStats(hydrosites, hydrosites$FDiv, FD)
@@ -213,6 +241,7 @@ getStats(hydrosites, hydrosites$FEve, FD)
 getStats(hydrosites, hydrosites$RaoQ, FD)
 getStats(hydrosites, hydrosites$nbsp, FD)
 
+getStats(hydrosites, hydrosites$richness, FD)
 
 getStats(hydrosites, hydrosites$simpson, FD)
 getStats(hydrosites, hydrosites$FunRao, FD)
@@ -225,7 +254,15 @@ getStats(hydrosites, hydrosites$redun, FD)
 #getStats(hydrosites, hydrosites$flowering.duration, CWM)
 #getStats(hydrosites, hydrosites$wood.density, CWM)
 #getStats(hydrosites, hydrosites$leaf.area, CWM)
+getStats(hydrosites, hydrosites$leaf.narrowness, CWM)
 
 
 
-plot.linear(hydrosites, hydrosites$FRic, FD)
+#plot.linear(hydrosites, hydrosites$FDis, FD)
+#plot.linear(hydrosites, hydrosites$FRic, FD)
+#plot.linear(hydrosites, hydrosites$FEve, FD)
+
+#plot.quad(hydrosites, hydrosites$FDis, FD)
+plot.quad(hydrosites, hydrosites$FRic, FD)
+#plot.quad(hydrosites, hydrosites$FEve, FD)
+

@@ -1,14 +1,14 @@
 {
-    "contents" : "plot(richness ~ MDFMDFDry, data = hydrosites)\nblah <- lm(richness ~ MDFMDFDry , data = hydrosites)\nsummary(blah)\n\n\nx <- aov(FDis ~ replicate, data = hydrosites)\nsummary(x)\n\nplot(nbsp ~ replicate, data = hydrosites)\n",
+    "contents" : "\nwithoutExotics <- cbind(hydrosites[\"FDis\"], hydrosites[\"FRic\"], hydrosites[\"FEve\"], hydrosites[\"FDiv\"])\n\nwithExotics <- cbind(hydrosites[\"FDis\"], hydrosites[\"FRic\"], hydrosites[\"FEve\"], hydrosites[\"FDiv\"])\n\n\nplot(withExotics$FDiv,withoutExotics$FDiv)\nplot(withExotics$FDis,withoutExotics$FDis)\nplot(withExotics$FEve,withoutExotics$FEve)\nplot(withExotics$FRic,withoutExotics$FRic)\n\n\n# FDwithout/FDwith vs percentage exotics - need abundance weighted FD metrics\n\n\nvegSurveys.ex <- subset(vegSurveys, source == \"exotic\")\n\nblah <- ddply(vegSurveys.ex, .(site), summarise, proportionExotic = sum(avgPerHa) / totalcover)\nblah <- unique(blah)\n\nexotics <- data.frame(cbind(blah[\"proportionExotic\"], \n                            \"FDis.proportion\" = withExotics$FDis / withoutExotics$FDis,\n                            \"FDiv.proportion\" = withExotics$FDiv / withoutExotics$FDiv,\n                            \"FRic.proportion\" = withExotics$FRic / withoutExotics$FRic,\n                            \"FEve.proportion\" = withExotics$FEve / withoutExotics$FEve))\n\n\n#write.csv(exotics, \"output/exotics.csv\")\n\n#read.csv(\"output/exotics.csv\", header=T)\n\n\nplot(FDis.proportion ~ proportionExotic, data = subset(exotics, FDis.proportion < 3))\nplot(FRic.proportion ~ proportionExotic, data = exotics)\nplot(FEve.proportion ~ proportionExotic, data = exotics)\nplot(FDiv.proportion ~ proportionExotic, data = exotics)\n\n\nblaj <- lm(FDis.proportion ~ proportionExotic + I(proportionExotic^2), data = exotics1)\nsummary(blaj)\n\nhydrosites$exotics <- exotics$proportionExotic\nplot(FDis ~ exotics, data = hydrosites)\nplot(FEve ~ exotics, data = hydrosites)\nplot(richness ~ exotics, data = hydrosites)\nplot(FDiv ~ exotics, data = hydrosites)\nplot(FRic ~ exotics, data = hydrosites)\n\ngetAllStats(hydrosites, hydrosites$exotics, FD)\n\nplot(exotics ~ MDFMDFDry, data = hydrosites)\n\n\nplot.quad(hydrosites, hydrosites$exotics, FD)\n\n\n\n\n",
     "created" : 1431398369046.000,
-    "dirty" : true,
-    "encoding" : "",
+    "dirty" : false,
+    "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "267369938",
+    "hash" : "1977367942",
     "id" : "AFAF9E5A",
-    "lastKnownWriteTime" : 1431392235,
-    "path" : null,
-    "project_path" : null,
+    "lastKnownWriteTime" : 1431596417,
+    "path" : "C:/Users/James/Desktop/stuff/data/analysis/R/SEQLD/scripts/exotics.R",
+    "project_path" : "scripts/exotics.R",
     "properties" : {
         "tempName" : "Untitled5"
     },
