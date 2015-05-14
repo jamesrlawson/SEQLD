@@ -1,0 +1,17 @@
+{
+    "contents" : "plot(richness ~ MDFMDFDry, data = hydrosites)\nblah <- lm(richness ~ MDFMDFDry , data = hydrosites)\nsummary(blah)\n\n\nx <- aov(FDis ~ replicate, data = hydrosites)\nsummary(x)\n\nplot(nbsp ~ replicate, data = hydrosites)\n",
+    "created" : 1431398369046.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "267369938",
+    "id" : "AFAF9E5A",
+    "lastKnownWriteTime" : 1431392235,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled5"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

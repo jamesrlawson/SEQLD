@@ -194,8 +194,8 @@ plot.quad <- function(df, var, trait, labels) { # var is alphaT/betaT/ts/Rs, etc
     r2 <- signif(summary(fit.quad)$r.squared, 5)
     pval <- anova(fit.quad)[1,"Pr(>F)"]
     
-    #  tiff(sprintf("%s/%s_pval-%s_r2-%s.png", outDir, hydroname, pval, r2), width = 400, height = 300)
-    svg(sprintf("%s/%s_pval-%s_r2-%s.svg", outDir, hydroname, pval, r2), width = 6.7, height = 5, pointsize=8)
+      tiff(sprintf("%s/%s_pval-%s_r2-%s.png", outDir, hydroname, pval, r2), width = 400, height = 300)
+    #svg(sprintf("%s/%s_pval-%s_r2-%s.svg", outDir, hydroname, pval, r2), width = 6.7, height = 5, pointsize=8)
     
     
     
@@ -219,15 +219,6 @@ plot.quad <- function(df, var, trait, labels) { # var is alphaT/betaT/ts/Rs, etc
     print(p)
     dev.off()
   }
-}
-
-# keeping this for future reference. returns the dataframe D_Sna_hydro_*trait*
-
-gettrait<- function(trait) {
-  
-  traitname <- deparse(substitute(trait))
-  get(sprintf("D_Sna_hydro_%s", traitname))
-  
 }
 
 
@@ -266,7 +257,7 @@ getStats <- function(df, var, trait) {
     
     colnames(x) <- c("metric", "pval.linear", "r2.linear", "pval.quad", "r2.quad")
     
-    if (pval.linear < 0.05) { 
+    if (pval.quad < 0.05) { 
       y <- rbind(x,y)
     }
     
@@ -317,6 +308,8 @@ getAllStats <- function(df, var, trait) {
   }
   
   var <- deparse(substitute(var))
+  
+  y <- y[order(y$pval.quad),]
   
   return(y)
   
