@@ -743,7 +743,7 @@ Cyclophyllum coprosmoides,,,,,,21.788,,10,,,,,,,,AUSTRAITS_dataset_49,
 Cyperus involucratus,,,,,,,,,0.055,,,,,,,AUSTRAITS_dataset_53,
 Cyperus involucratus,,,,,,,,,,,11,3,5,,,http://weeds.brisbane.qld.gov.au/weeds/umbrella-sedge,
 Cyperus involucratus,,,,,,,,1.2,,,,,,,,http://weeds.brisbane.qld.gov.au/weeds/umbrella-sedge,
-Cyperus involucratus,,,,,,,,,,,,,,90,0.425,NSW Flora Online,
+Cyperus involucratus,,,,,,38.25,,,,,,,,90,0.425,"NSW Flora Online,leaf area calculated from leaf dimensions",
 Daphnandra apatela,,,,,,19.25,,,,,,,,,,AUSTRAITS_dataset_68,
 Daphnandra apatela,,,,,,19.25,,,,,,,,,,AUSTRAITS_dataset_68,
 Daphnandra apatela,,,,,,20.213,559,35,,,,,,,,AUSTRAITS_dataset_49,
@@ -985,7 +985,7 @@ Endiandra virens,,,,,,16.625,,10,,,,,,,,AUSTRAITS_dataset_49,
 Endiandra discolor,,,,,,,,,,,,,,7,3.5,NSW flora online,
 Endiandra pubens,,,,,,,,,,,,,,10,3.5,NSW flora online,
 Endiandra sieberi,,,,,,,,,,,,,,7.5,2,NSW Flora Online,
-Enidandra discolor,118.5088646,cm2/g,,,,19.5572,,,,,,,,,,C. James SEQLD field data,
+Endiandra discolor,118.5088646,cm2/g,,,,19.5572,,,,,,,,,,C. James SEQLD field data,
 Erythrina species 'Croftby',,,,,,31.85,215,30,62.832,,,,,,,AUSTRAITS_dataset_49,
 Eugenia uniflora,,,,,,,,,258.292,,,,,,,AUSTRAITS_dataset_53,
 Eugenia uniflora,,,,,,,,,,,4,10,7,,,http://www.weeds.org.au/cgi-bin/weedident.cgi?tpl=plant.tpl&state=&s=&ibra=all&card=T40,
@@ -1481,18 +1481,18 @@ Ligustrum lucidum,,,,,,,,,31,,,,,,,Kew SID,
 Ligustrum lucidum,,,,,,,0.57942,,,,,,,,,Global Wood Density Database average,
 Ligustrum lucidum,,,,,,,,,,,9,2,6,,,NSW flora online ,
 Ligustrum lucidum,164.3672259,cm2/g,,,,14.0416,,,,,,,,,,C. James SEQLD field data,
-Ligustrum sinense,8.96,mm2/mg,,,,13.07,,3,22.477,,,,,,,AUSTRAITS_dataset_10,
-Ligustrum sinense,,,,,,13.07,,,,,,,,,,AUSTRAITS_dataset_68,
+Ligustrum sinense,8.96,mm2/mg,,,,,,3,22.477,,,,,,,AUSTRAITS_dataset_10,
+Ligustrum sinense,,,,,,,,,,,,,,,,AUSTRAITS_dataset_68,
 Ligustrum sinense,,,,,,,,,22.477,,,,,,,AUSTRAITS_dataset_52,
 Ligustrum sinense,,,,,,,,,11,,,,,,,AUSTRAITS_dataset_52,
 Ligustrum sinense,,,,,,,,,,,,,,,,NSW flora online ,
 Ligustrum sinense,,,,,,,,3,,,,,,,,AUSTRAITS_dataset_26,
 Ligustrum sinense,,,,,,,,,17,,,,,,,AUSTRAITS_dataset_53,
-Ligustrum sinense,10.46479477,,,,,,,,,,,,,,,J. Lawson,
+Ligustrum sinense,10.46479477,mm2/mg,,,,,,,,,,,,,,J. Lawson,
 Ligustrum sinense,,,,,,,,,17,,,,,,,Kew SID,
 Ligustrum sinense,,,,,,,0.612,,,,,,,,,"Martínez-Cabrera HI, Jones CS, Espino S, Schenk HJ. 2009.  Wood anatomy and wood density in shrubs: Responses to varying aridity along transcontinental transects. American Journal of Botany 96: 1388-1398",
 Ligustrum sinense,,,,,,,,,,,7,11,5,,,NSW flora online ,
-Ligustrum sinensis,428.418513,cm2/g,,,,3.6995,,,,,,,,,,C. James SEQLD field data,
+Ligustrum sinense,,,,,,3.6995,,,,,,,,,,C. James SEQLD field data,
 Ligustrum lucidum,,,,,,,,,,,,,,8.5,4,NSW Flora Online,
 Ligustrum sinense,,,,,,,,,,,,,,3.5,2,NSW Flora Online,
 Lomandra longifolia,1.656, mm2/g,,,,,,0.3,,,,,,,,AUSTRAITS_dataset_8,
@@ -2737,62 +2737,62 @@ Wilkiea macrophylla,,,,,,,,,,,,,,,,NSW flora online ,
 Wilkiea macrophylla,,,,,,,,,,,12,2,3,,,NSW flora online ,
 Wilkiea huegeliana,,,,,,,,,,,,,,10.5,3,NSW flora online,
 Wilkiea macrophylla,,,,,,,,,,,,,,15,6,NSW flora online,
-Macfadyena unguis-cati,,,,,,,,20,,,9,11,4,,,http://www.weeds.org.au/cgi-bin/weedident.cgi?tpl=plant.tpl&state=&s=&ibra=all&card=V05,
-Macfadyena unguis-cati,161.09,cm2/g,,,,,,,,,,,,,,http://onlinelibrary.wiley.com.simsrad.net.ocs.mq.edu.au/doi/10.1111/j.1442-9993.2009.02071.x/full,
-Macfadyena unguis-cati,,,,,,14,,,,,,,,,,"TWO VARIETIES OF THE INVASIVE CAT’S CLAW CREEPER, MACFADYENA UNGUIS-CATI (BIGNONIACEAE) IN QUEENSLAND, AUSTRALIA",leaf area estimated from leaf dimensions
-Macfadyena unguis-cati,,,,,,,,,29,,,,,,,http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2435.2005.01034.x/full,
+Macfadyena unguiscati,,,,,,,,20,,,9,11,4,,,http://www.weeds.org.au/cgi-bin/weedident.cgi?tpl=plant.tpl&state=&s=&ibra=all&card=V05,
+Macfadyena unguiscati,161.09,cm2/g,,,,,,,,,,,,,,http://onlinelibrary.wiley.com.simsrad.net.ocs.mq.edu.au/doi/10.1111/j.1442-9993.2009.02071.x/full,
+Macfadyena unguiscati,,,,,,14,,,,,,,,,,"TWO VARIETIES OF THE INVASIVE CAT’S CLAW CREEPER, MACFADYENA UNGUIS-CATI (BIGNONIACEAE) IN QUEENSLAND, AUSTRALIA",leaf area estimated from leaf dimensions
+Macfadyena unguiscati,,,,,,,,,29,,,,,,,http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2435.2005.01034.x/full,
 Cardiospermum grandiflorum,,,,,,,,,34.692,,,,,,,PIREL Seed Trait Database,
 Cardiospermum grandiflorum,,,,,,8.81,,10,,,9,2,6,,,NSW flora online,
 Cardiospermum grandiflorum,23.97813288,mm2/mg,,,,,,,,,,,,,,Kyle & Leishman,
 Schoenoplectus validus,,,,,,,,,0.91,,,,,,,PIREL Seed Trait Database,
-Schoenoplectus validus,,,,,,,,2,,,9,2,6,,,NSW flora online,
+Schoenoplectus validus,,,,,,97.5,,2,,,9,2,6,150,0.65,NSW flora online,leaf area calculated as mean leaf length * mean leaf width
 Senna pendula,,,,,,3.06,,3,,,1,12,12,,,NSW flora online,leaf area estimated from leaf dimensions
 Senna pendula,,,,,,,,,18.5,,,,,,,"http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2745.2004.00938.x/full (Experimental evidence for the effects of additional water, nutrients and physical disturbance on invasive plants in low fertility Hawkesbury Sandstone soils, Sydney, Australia)",
-Lomandra sp ,1.656, mm2/g,,,,,,0.3,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
-Lomandra sp ,3.377, mm2/g,,,,8.158,,0.8,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
-Lomandra sp ,,,,,,15.39,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,,,,,,19.54,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,2.477, mm2/g,,,,19.541,,1,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
-Lomandra sp ,6.431, mm2/g,,,,23.385,,1,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
-Lomandra sp ,,,,,,23.39,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,1.824, mm2/g,,,,28.125,,0.8,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
-Lomandra sp ,,,,,,28.13,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,5.56,mm2/mg,,,,61.33,,0.4,11.33,,,,,,,AUSTRAITS_dataset_10,using L. longifolia data
-Lomandra sp ,,,,,,61.33,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,,,,,,61.33,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,,,,,,81.58,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,7.007, mm2/g,,,,83.809,,0.7,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
-Lomandra sp ,,,,,,83.81,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
-Lomandra sp ,41.991,cm2/g,,,,,,,,,,,,,,AUSTRAITS_dataset_32,using L. longifolia data
-Lomandra sp ,53.576,cm2/g,,,,,,,,,,,,,,AUSTRAITS_dataset_32,using L. longifolia data
-Lomandra sp ,,,,,,,,0.7,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
-Lomandra sp ,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
-Lomandra sp ,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
-Lomandra sp ,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
-Lomandra sp ,,,,,,,,0.3,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
-Lomandra sp ,,,,,,,,1,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
-Lomandra sp ,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_24,using L. longifolia data
-Lomandra sp ,,,,,,,,,,,,,,,,NSW flora online ,using L. longifolia data
-Lomandra sp ,,,,,,,,0.4,,,,,,,,AUSTRAITS_dataset_26,using L. longifolia data
-Lomandra sp ,12.89337361,,,,,,,,,,,,,,,J. Lawson,using L. longifolia data
-Lomandra sp ,,,,,,,,,11.33,,,,,,,Moles 2004 Seed database,using L. longifolia data
-Lomandra sp ,,,,,,,,,,,8,12,5,,,AUSTRAITS_dataset_24,using L. longifolia data
-Lomandra sp ,,,,,,,,,,,,,,75,0.625,NSW Flora Online,using L. longifolia data
-Carex spp ,,,,,,17.48,,,,,,,,,,AUSTRAITS_dataset_68,using data from C. appressa
-Carex spp ,,,,,,31.86,,,,,,,,,,AUSTRAITS_dataset_68,using data from C. appressa
-Carex spp ,14.14,mm2/mg,,,,36,,1,1.001,,,,,,,AUSTRAITS_dataset_10,using data from C. appressa
-Carex spp ,,,,,,36,,,,,,,,,,AUSTRAITS_dataset_68,using data from C. appressa
-Carex spp ,,,,,,,,,1.001,,,,,,,AUSTRAITS_dataset_52,using data from C. appressa
-Carex spp ,,,,,,,,,,,,,,,,NSW flora online ,using data from C. appressa
-Carex spp ,,,,,,,,1,,,,,,,,AUSTRAITS_dataset_26,using data from C. appressa
-Carex spp ,,,,,,,,,0.83,,,,,,,AUSTRAITS_dataset_53,using data from C. appressa
-Carex spp ,,,,,,,,1.5,,,,,,,,AUSTRAITS_dataset_57,using data from C. appressa
-Carex spp ,,,,,,,,,,,9,12,4,,,NSW flora online ,using data from C. appressa
-Carex spp ,,,,,,,,,,,,,,80,0.3,NSW Flora Online,using data from C. appressa
-Cyperus spp ,,,,,,,,,0.055,,,,,,,AUSTRAITS_dataset_53,using data from Cyperus involucratus
-Cyperus spp ,,,,,,,,,,,11,3,5,,,http://weeds.brisbane.qld.gov.au/weeds/umbrella-sedge,using data from Cyperus involucratus
-Cyperus spp ,,,,,,,,1.2,,,,,,,,http://weeds.brisbane.qld.gov.au/weeds/umbrella-sedge,using data from Cyperus involucratus
-Cyperus spp ,,,,,,,,,,,,,,90,0.425,NSW Flora Online,using data from Cyperus involucratus
+Lomandra sp,1.656, mm2/g,,,,,,0.3,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
+Lomandra sp,3.377, mm2/g,,,,8.158,,0.8,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
+Lomandra sp,,,,,,15.39,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,,,,,,19.54,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,2.477, mm2/g,,,,19.541,,1,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
+Lomandra sp,6.431, mm2/g,,,,23.385,,1,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
+Lomandra sp,,,,,,23.39,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,1.824, mm2/g,,,,28.125,,0.8,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
+Lomandra sp,,,,,,28.13,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,5.56,mm2/mg,,,,61.33,,0.4,11.33,,,,,,,AUSTRAITS_dataset_10,using L. longifolia data
+Lomandra sp,,,,,,61.33,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,,,,,,61.33,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,,,,,,81.58,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,7.007, mm2/g,,,,83.809,,0.7,,,,,,,,AUSTRAITS_dataset_8,using L. longifolia data
+Lomandra sp,,,,,,83.81,,,,,,,,,,AUSTRAITS_dataset_68,using L. longifolia data
+Lomandra sp,41.991,cm2/g,,,,,,,,,,,,,,AUSTRAITS_dataset_32,using L. longifolia data
+Lomandra sp,53.576,cm2/g,,,,,,,,,,,,,,AUSTRAITS_dataset_32,using L. longifolia data
+Lomandra sp,,,,,,,,0.7,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
+Lomandra sp,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
+Lomandra sp,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
+Lomandra sp,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
+Lomandra sp,,,,,,,,0.3,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
+Lomandra sp,,,,,,,,1,,,,,,,,AUSTRAITS_dataset_52,using L. longifolia data
+Lomandra sp,,,,,,,,0.8,,,,,,,,AUSTRAITS_dataset_24,using L. longifolia data
+Lomandra sp,,,,,,,,,,,,,,,,NSW flora online ,using L. longifolia data
+Lomandra sp,,,,,,,,0.4,,,,,,,,AUSTRAITS_dataset_26,using L. longifolia data
+Lomandra sp,12.89337361,,,,,,,,,,,,,,,J. Lawson,using L. longifolia data
+Lomandra sp,,,,,,,,,11.33,,,,,,,Moles 2004 Seed database,using L. longifolia data
+Lomandra sp,,,,,,,,,,,8,12,5,,,AUSTRAITS_dataset_24,using L. longifolia data
+Lomandra sp,,,,,,,,,,,,,,75,0.625,NSW Flora Online,using L. longifolia data
+Carex spp,,,,,,17.48,,,,,,,,,,AUSTRAITS_dataset_68,using data from C. appressa
+Carex spp,,,,,,31.86,,,,,,,,,,AUSTRAITS_dataset_68,using data from C. appressa
+Carex spp,14.14,mm2/mg,,,,36,,1,1.001,,,,,,,AUSTRAITS_dataset_10,using data from C. appressa
+Carex spp,,,,,,36,,,,,,,,,,AUSTRAITS_dataset_68,using data from C. appressa
+Carex spp,,,,,,,,,1.001,,,,,,,AUSTRAITS_dataset_52,using data from C. appressa
+Carex spp,,,,,,,,,,,,,,,,NSW flora online ,using data from C. appressa
+Carex spp,,,,,,,,1,,,,,,,,AUSTRAITS_dataset_26,using data from C. appressa
+Carex spp,,,,,,,,,0.83,,,,,,,AUSTRAITS_dataset_53,using data from C. appressa
+Carex spp,,,,,,,,1.5,,,,,,,,AUSTRAITS_dataset_57,using data from C. appressa
+Carex spp,,,,,,,,,,,9,12,4,,,NSW flora online ,using data from C. appressa
+Carex spp,,,,,,,,,,,,,,80,0.3,NSW Flora Online,using data from C. appressa
+Cyperus spp,,,,,,,,,0.055,,,,,,,AUSTRAITS_dataset_53,using data from Cyperus involucratus
+Cyperus spp,,,,,,,,,,,11,3,5,,,http://weeds.brisbane.qld.gov.au/weeds/umbrella-sedge,using data from Cyperus involucratus
+Cyperus spp,,,,,,,,1.2,,,,,,,,http://weeds.brisbane.qld.gov.au/weeds/umbrella-sedge,using data from Cyperus involucratus
+Cyperus spp,,,,,,38.25,,,,,,,,90,0.425,NSW Flora Online,"using data from Cyperus involucratus, leaf area calculated as mean leaf length * mean leaf width"
 Melaleuca spp,,,,,,0.299,,15,,,,,,,,AUSTRAITS_dataset_49,using data from M. bracteata
 Melaleuca spp,,,,,,,,,,,,,,,,NSW flora online ,using data from M. bracteata
 Melaleuca spp,,,,,,,,,,0.033,,,,,,AUSTRAITS_dataset_17,using data from M. bracteata
@@ -2803,5 +2803,7 @@ Melaleuca spp,,,,,,,,,,,9,11,3,,,NSW flora online ,using data from M. bracteata
 Ripogonum spp,,,,,,37.2,,15,,,9,1,5,,,NSW flora online,"using data from Ripogonum album, leaf area calculated from leaf dimensions"
 Ripogonum spp,11.94,mm2/mg,,,,,,,,,,,,,,J. Lawson field obs.,
 Ripogonum spp,,,,,,,,,1.89,,,,,,,Rob Kooyman,
-Nandina spp ,,,,,,11.8,,2,,,,,,,,https://en.wikipedia.org/wiki/Nandina,
-Nandina spp ,,,,,,,,,19.2,,,,,,,Kew SID,
+Nandina spp,,,,,,11.8,,2,,,,,,,,https://en.wikipedia.org/wiki/Nandina,
+Nandina spp,,,,,,,,,19.2,,,,,,,Kew SID,
+Lomandra hystrix,,,,,,85.25,,1.3,,,9,2,6,,,"NSW flora online, leaf area calculated as mean leaf length * mean leaf width",
+Lomandra hystrix,,,,,,,,,13.92,,,,,,,Kew SID,

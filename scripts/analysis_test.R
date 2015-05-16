@@ -29,18 +29,20 @@ alltraits <- merge(alltraits, source_GF, all.x=TRUE)
 alltraits$X <- NULL
 
   alltraits <- missing(alltraits)
+  alltraits.discarded <- subset(alltraits, missing >=3)
   alltraits <- subset(alltraits, missing <3) # only keep species with less than X NA trait values
+ # alltraits <- rbind(alltraits, alltraits.discarded["Pteridium.esculentum",])
   alltraits$missing <- NULL
-
+  
 
 # normalise data
 
-alltraits$SLA <- log10(alltraits$SLA)
-alltraits$leaf.area <- sqrt(alltraits$leaf.area)
-alltraits$seed.mass <- log10(alltraits$seed.mass)
-alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
-alltraits$maximum.height <- sqrt(alltraits$maximum.height)
-alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
+#alltraits$SLA <- log10(alltraits$SLA)
+#alltraits$leaf.area <- sqrt(alltraits$leaf.area)
+#alltraits$seed.mass <- log10(alltraits$seed.mass)
+#alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
+#alltraits$maximum.height <- sqrt(alltraits$maximum.height)
+#alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
 
 # impute missing data using either mice or missForests
 
@@ -52,22 +54,22 @@ alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
   #alltraits$wood.density.1 <- NULL
   
   
- # imputed <- missForest(alltraits[,2:7], maxiter = 100, ntree= 100, verbose =TRUE, replace=TRUE, variablewise=TRUE)
- # alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
- # colnames(alltraits.imputed) <- c("Taxon", 
- #                         "flowering.duration",
- #                         "leaf.narrowness",
-  #                        "maximum.height",
-  #                        "seed.mass",
- #                         "SLA",
- #                         "wood.density")
- # alltraits.imputed$wood.density <- alltraits$wood.density
- # alltraits.imputed$leaf.narrowness <- alltraits$leaf.narrowness
- # alltraits.imputed$seed.mass <- alltraits$seed.mass
- # alltraits.imputed$maximum.height <- alltraits$seed.mass
+#  imputed <- missForest(alltraits[,2:7], maxiter = 100, ntree= 100, verbose =TRUE, replace=TRUE, variablewise=TRUE)
+#  alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
+#  colnames(alltraits.imputed) <- c("Taxon", 
+#                          "flowering.duration",
+#                          "leaf.area",
+#                          "maximum.height",
+#                          "seed.mass",
+#                          "SLA",
+#                          "wood.density")
+#  alltraits.imputed$wood.density <- alltraits$wood.density
+#  alltraits.imputed$leaf.area <- alltraits$leaf.area
+#  alltraits.imputed$seed.mass <- alltraits$seed.mass
+#  alltraits.imputed$maximum.height <- alltraits$seed.mass
 
 
-  #alltraits <- alltraits.imputed
+#  alltraits <- alltraits.imputed
   
   #alltraits <- na.omit(alltraits)
 

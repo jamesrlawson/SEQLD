@@ -18,7 +18,8 @@ vegSurveys.ex <- subset(vegSurveys, source == "exotic")
 blah <- ddply(vegSurveys.ex, .(site), summarise, proportionExotic = sum(avgPerHa) / totalcover)
 blah <- unique(blah)
 
-exotics <- data.frame(cbind(blah["proportionExotic"], 
+exotics <- data.frame(cbind(blah["site"],
+                            blah["proportionExotic"],
                             "FDis.proportion" = withExotics$FDis / withoutExotics$FDis,
                             "FDiv.proportion" = withExotics$FDiv / withoutExotics$FDiv,
                             "FRic.proportion" = withExotics$FRic / withoutExotics$FRic,
@@ -29,14 +30,14 @@ exotics <- data.frame(cbind(blah["proportionExotic"],
 
 #read.csv("output/exotics.csv", header=T)
 
-
+#plot(FDis.proportion ~ proportionExotic, data = exotics)
 plot(FDis.proportion ~ proportionExotic, data = subset(exotics, FDis.proportion < 3))
 plot(FRic.proportion ~ proportionExotic, data = exotics)
 plot(FEve.proportion ~ proportionExotic, data = exotics)
 plot(FDiv.proportion ~ proportionExotic, data = exotics)
 
 
-blaj <- lm(FDis.proportion ~ proportionExotic + I(proportionExotic^2), data = exotics1)
+blaj <- lm(FDis.proportion ~ proportionExotic + I(proportionExotic^2), subset(exotics, FDis.proportion < 3))
 summary(blaj)
 
 hydrosites$exotics <- exotics$proportionExotic
@@ -49,10 +50,11 @@ plot(FRic ~ exotics, data = hydrosites)
 getAllStats(hydrosites, hydrosites$exotics, FD)
 
 plot(exotics ~ MDFMDFDry, data = hydrosites)
+plot(redun ~ exotics, data = hydrosites)
+plot(redun ~ MDFMDFDry, data = hydrosites)
 
 
 plot.quad(hydrosites, hydrosites$exotics, FD)
-
 
 
 
