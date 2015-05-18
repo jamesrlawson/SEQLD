@@ -2807,3 +2807,8 @@ Nandina spp,,,,,,11.8,,2,,,,,,,,https://en.wikipedia.org/wiki/Nandina,
 Nandina spp,,,,,,,,,19.2,,,,,,,Kew SID,
 Lomandra hystrix,,,,,,85.25,,1.3,,,9,2,6,,,"NSW flora online, leaf area calculated as mean leaf length * mean leaf width",
 Lomandra hystrix,,,,,,,,,13.92,,,,,,,Kew SID,
+Archontophoenix spp,,,,,,,,,568.2,,,,,,,Kew SID,
+Archontophoenix spp,,,,,,225,,25,,,3,5,3,75,5.5,"NSW flora online, leaf area calculated as mean leaf length * mean leaf width",
+Archontophoenix spp,173.41,cm2/g,,,,,,,,,,,,,, http://onlinelibrary.wiley.com.simsrad.net.ocs.mq.edu.au/doi/10.1111/gcb.12531/full (Predicting plant invasions under climate change: are species distribution models validated by field trials?),
+Desmodium spp,,,,,,14.7,,1.5,,,9,2,6,,,NSW flora online,"as Desmodium uncinatum, leaf area calculated as avg leaf length * leaf width * 0.7"
+Desmodium spp,,,,,,,,,3.89,,,,,,,Kew SID,

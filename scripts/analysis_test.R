@@ -15,14 +15,13 @@ alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
 vegSurveys <- read.csv("data/vegSurveys.csv", header=T)
 hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
-source_GF <- read.csv("data/source_growthForm.csv", header=T)
+source_GF <- read.csv("data/source_growthForm1.csv", header=T)
 
 alltraits <- merge(alltraits, source_GF, all.x=TRUE)
 
 #alltraits <- subset(alltraits, source != "exotic")
 
 #alltraits$source <- NULL
-
 
 #alltraits <- na.omit(alltraits)
 
@@ -31,17 +30,19 @@ alltraits$X <- NULL
   alltraits <- missing(alltraits)
   alltraits.discarded <- subset(alltraits, missing >=3)
   alltraits <- subset(alltraits, missing <3) # only keep species with less than X NA trait values
- # alltraits <- rbind(alltraits, alltraits.discarded["Pteridium.esculentum",])
+  alltraits <- rbind(alltraits, alltraits.discarded[46,])
+#  alltraits <- alltraits[-57,]
+#  alltraits <- alltraits[-12,]
   alltraits$missing <- NULL
   
 
 # normalise data
 
-#alltraits$SLA <- log10(alltraits$SLA)
-#alltraits$leaf.area <- sqrt(alltraits$leaf.area)
-#alltraits$seed.mass <- log10(alltraits$seed.mass)
-#alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
-#alltraits$maximum.height <- sqrt(alltraits$maximum.height)
+alltraits$SLA <- log10(alltraits$SLA)
+alltraits$leaf.area <- sqrt(alltraits$leaf.area)
+alltraits$seed.mass <- log10(alltraits$seed.mass)
+alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
+alltraits$maximum.height <- sqrt(alltraits$maximum.height)
 #alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
 
 # impute missing data using either mice or missForests
@@ -54,22 +55,24 @@ alltraits$X <- NULL
   #alltraits$wood.density.1 <- NULL
   
   
-#  imputed <- missForest(alltraits[,2:7], maxiter = 100, ntree= 100, verbose =TRUE, replace=TRUE, variablewise=TRUE)
-#  alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
-#  colnames(alltraits.imputed) <- c("Taxon", 
-#                          "flowering.duration",
-#                          "leaf.area",
-#                          "maximum.height",
-#                          "seed.mass",
-#                          "SLA",
-#                          "wood.density")
-#  alltraits.imputed$wood.density <- alltraits$wood.density
-#  alltraits.imputed$leaf.area <- alltraits$leaf.area
-#  alltraits.imputed$seed.mass <- alltraits$seed.mass
-#  alltraits.imputed$maximum.height <- alltraits$seed.mass
+ # imputed <- missForest(alltraits[,2:8], maxiter = 100, ntree= 1000, verbose =TRUE, replace=TRUE, variablewise=TRUE)
+  alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
+  colnames(alltraits.imputed) <- c("Taxon", 
+                         "flowering.duration",
+                          "leaf.area",
+                         "maximum.height",
+                         "seed.mass",
+                         "SLA",
+                          "wood.density",
+                         "growthForm")
+  #alltraits.imputed$wood.density <- alltraits$wood.density
+  #alltraits.imputed$leaf.area <- alltraits$leaf.area
+  #alltraits.imputed$seed.mass <- alltraits$seed.mass
+  #alltraits.imputed$maximum.height <- alltraits$seed.mass
+  #alltraits.imputed$growthForm <- alltraits$growthForm
 
 
-#  alltraits <- alltraits.imputed
+  #alltraits <- alltraits.imputed
   
   #alltraits <- na.omit(alltraits)
 
@@ -248,9 +251,10 @@ getStats(hydrosites, hydrosites$RaoQ, FD)
 
 #getStats(hydrosites, hydrosites$richness, FD)
 
-#getStats(hydrosites, hydrosites$simpson, FD)
-#getStats(hydrosites, hydrosites$FunRao, FD)
-#getStats(hydrosites, hydrosites$redun, FD)
+
+getStats(hydrosites, hydrosites$simpson, FD)
+getStats(hydrosites, hydrosites$FunRao, FD)
+getStats(hydrosites, hydrosites$redun, FD)
 
 
 #getStats(hydrosites, hydrosites$SLA, CWM)

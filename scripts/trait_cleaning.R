@@ -320,6 +320,8 @@ traits.leaf.narrowness$Taxon <- as.factor(traits.leaf.narrowness$Taxon)
 
   #levels(alltraits$Taxon) <- capitalise(levels(alltraits$Taxon)) # make sure spp names are properly capitalised
 
+  alltraits <- alltraits[order(alltraits$Taxon),]
+
   write.csv(alltraits, "data/alltraits.csv")
  
   rm(list = ls())
