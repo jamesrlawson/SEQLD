@@ -42,6 +42,8 @@ blaj <- lm(FDis.proportion ~ proportionExotic + I(proportionExotic^2), subset(ex
 summary(blaj)
 
 hydrosites$exotics <- exotics.x$proportionExotic
+
+
 plot(FDis ~ exotics, data = hydrosites)
 plot(FEve ~ exotics, data = hydrosites)
 plot(richness ~ exotics, data = hydrosites)
@@ -66,6 +68,8 @@ plot(exotics ~ regulation,data=hydrosites)
 
 
 plot(simpson ~ exotics, data = hydrosites)
+plot(simpson ~ regulation, data = hydrosites)
+plot(FEve ~ regulation, data = hydrosites)
 
 plot.quad(hydrosites, hydrosites$exotics, FD)
 plot.quad(hydrosites, hydrosites$FDis, FD)

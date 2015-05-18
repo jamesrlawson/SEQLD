@@ -265,8 +265,8 @@ getStats <- function(df, var, trait) {
   
   var <- deparse(substitute(var))
   
-  y$padj.linear <- p.adjust(y$pval.linear, method="BH", n=31)
-  y$padj.quad <- p.adjust(y$pval.quad, method="BH", n=31)
+  y$padj.linear <- p.adjust(y$pval.linear, method="BH")
+  y$padj.quad <- p.adjust(y$pval.quad, method="BH")
   
   write.csv(y, sprintf("%s/%s_stats.csv", statsDir, var))
   

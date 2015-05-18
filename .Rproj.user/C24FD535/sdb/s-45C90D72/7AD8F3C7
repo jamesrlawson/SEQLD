@@ -1,0 +1,17 @@
+{
+    "contents" : "SPATIAL AUTOCORRELATION TEST ##\n\nrequire(ade4)\nspatial <- read.csv(\"data/spatial.csv\", header=T)\n\n# for hydro metrics #\n\nhydrosites1 <- merge(hydro, sites, all.y=TRUE)[,4:37]\n\nspatial.dist <- dist(spatial[,2:3])\nhydro.dist <- dist(hydrosites1[,1:34])\n#hydro.signif.dist <- dist(hydro.signif)\n\nmantel.rtest(spatial.dist, hydro.dist, nrepet=9999)\n#mantel.rtest(spatial.dist, hydro.signif.dist, nrepet=9999)\n\n# for CWM #\n\nspatial.dist.inv <- as.matrix(1/spatial.dist)\ndiag(spatial.dist.inv) <- 0\n\nMoran.I(hydrosites$exotics, spatial.dist.inv)\nMoran.I(hydrosites$regulation, spatial.dist.inv, na.rm=TRUE)\nMoran.I(hydrosites$richness, spatial.dist.inv)\n\n",
+    "created" : 1431920324876.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "721619103",
+    "id" : "7AD8F3C7",
+    "lastKnownWriteTime" : 1431922391,
+    "path" : "C:/Users/James/Desktop/stuff/data/analysis/R/SEQLD/scripts/spatial.R",
+    "project_path" : "scripts/spatial.R",
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

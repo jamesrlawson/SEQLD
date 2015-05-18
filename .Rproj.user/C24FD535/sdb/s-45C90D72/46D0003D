@@ -1,0 +1,17 @@
+{
+    "contents" : "# CLIMATE #\n\nclimate <- read.csv(\"data/sites_clim_soil.csv\", header=T) \n\nhydrosites2 <- merge(hydro, sites, all.y=TRUE, by = c(\"gaugeID\"))\nhydrosites <- hydrosites[order(hydrosites$site),]\n\nhydrosites2 <- hydrosites2[,4:39]\n\nblah <- merge(climate, hydrosites2, by=c(\"site\"))\n\nblah <- blah[,7:72]\n\nblah$site <- siteNums\nblah$FDis <- FD$FDis\nblah$FDiv <- FD$FDiv\nblah$FRic <- FD$FRic\nblah$FEve <- FD$FEve\nblah$RaoQ <- FD$RaoQ\nblah$FGR <- FD$FGR\nblah$nbsp <- FD$nbsp\nblah$simpson <- FD.redun$Simpson\nblah$FunRao <- FD.redun$FunRao\nblah$redun <- FD.redun$FunRedundancy\nblah$nbsp <- FD$nbsp\nblah$richness <- richness$richness\nblah$exotics <- exotics.x$proportionExotic\n\n\ngetStats(blah, blah$FDis, FD)\ngetStats(blah, blah$FDiv, FD)\ngetStats(blah, blah$FRic, FD)\ngetStats(blah, blah$FEve, FD)\ngetStats(blah, blah$RaoQ, FD)\ngetStats(blah, blah$simpson, FD)\ngetStats(blah, blah$FunRao, FD)\ngetStats(blah, blah$redun, FD)\ngetStats(blah, blah$richness, FD)\ngetStats(blah, blah$regulation, FD)\ngetStats(blah, blah$exotics, FD)\n",
+    "created" : 1431922389672.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1441563867",
+    "id" : "46D0003D",
+    "lastKnownWriteTime" : 1431926440,
+    "path" : "C:/Users/James/Desktop/stuff/data/analysis/R/SEQLD/scripts/climate_soil.R",
+    "project_path" : "scripts/climate_soil.R",
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

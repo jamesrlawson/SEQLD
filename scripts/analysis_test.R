@@ -214,9 +214,14 @@ hydro$PC2 <- hydro.pca$x[,2]
 hydro$PC3 <- hydro.pca$x[,3]
 hydro$PC4 <- hydro.pca$x[,4]
 
-hydrosites <- merge(hydro, sites, all.y=TRUE)
+
+hydrosites <- merge(hydro, sites, all.y=TRUE, by = c("gaugeID"))
+siteNums <- hydrosites$site
+hydrosites <- hydrosites[order(hydrosites$site),]
 hydrosites <- hydrosites[,4:38]
 
+
+hydrosites$site <- siteNums
 hydrosites$FDis <- FD$FDis
 hydrosites$FDiv <- FD$FDiv
 hydrosites$FRic <- FD$FRic
@@ -230,6 +235,7 @@ hydrosites$redun <- FD.redun$FunRedundancy
 hydrosites$nbsp <- FD$nbsp
 
 hydrosites$richness <- richness$richness
+hydrosites$exotics <- exotics.x$proportionExotic
 
 CWM <- FD$CWM
 
@@ -238,8 +244,8 @@ hydrosites$seed.mass <- CWM$seed.mass
 hydrosites$maximum.height <- CWM$maximum.height
 hydrosites$flowering.duration <- CWM$flowering.duration
 hydrosites$wood.density <- CWM$wood.density
-#hydrosites$leaf.area <- CWM$leaf.area
-hydrosites$leaf.narrowness<- CWM$leaf.narrowness
+hydrosites$leaf.area <- CWM$leaf.area
+#hydrosites$leaf.narrowness<- CWM$leaf.narrowness
 
 
 getStats(hydrosites, hydrosites$FDis, FD)
@@ -256,6 +262,7 @@ getStats(hydrosites, hydrosites$simpson, FD)
 getStats(hydrosites, hydrosites$FunRao, FD)
 getStats(hydrosites, hydrosites$redun, FD)
 getStats(hydrosites, hydrosites$richness, FD)
+getStats(hydrosites, hydrosites$exotics, FD)
 
 #getStats(hydrosites, hydrosites$SLA, CWM)
 #getStats(hydrosites, hydrosites$seed.mass, CWM)
