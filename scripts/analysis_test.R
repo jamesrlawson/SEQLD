@@ -14,7 +14,7 @@ library(SYNCSA)
 alltraits <- read.csv("data/alltraits.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
 vegSurveys <- read.csv("data/vegSurveys.csv", header=T)
-hydro <- read.csv("data/raw/hydro_1975-2008.csv", header=T)
+hydro <- read.csv("data/hydro_1975-2008.csv", header=T)
 source_GF <- read.csv("data/source_growthForm1.csv", header=T)
 
 alltraits <- merge(alltraits, source_GF, all.x=TRUE)
@@ -215,7 +215,7 @@ hydro$PC3 <- hydro.pca$x[,3]
 hydro$PC4 <- hydro.pca$x[,4]
 
 hydrosites <- merge(hydro, sites, all.y=TRUE)
-hydrosites <- hydrosites[,4:41]
+hydrosites <- hydrosites[,4:38]
 
 hydrosites$FDis <- FD$FDis
 hydrosites$FDiv <- FD$FDiv
@@ -255,7 +255,7 @@ getStats(hydrosites, hydrosites$RaoQ, FD)
 getStats(hydrosites, hydrosites$simpson, FD)
 getStats(hydrosites, hydrosites$FunRao, FD)
 getStats(hydrosites, hydrosites$redun, FD)
-
+getStats(hydrosites, hydrosites$richness, FD)
 
 #getStats(hydrosites, hydrosites$SLA, CWM)
 #getStats(hydrosites, hydrosites$seed.mass, CWM)

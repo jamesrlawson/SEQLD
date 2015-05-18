@@ -49,14 +49,20 @@ plot(FDiv ~ exotics, data = hydrosites)
 plot(FRic ~ exotics, data = hydrosites)
 plot(redun ~ exotics, data = hydrosites)
 plot(RaoQ ~ exotics, data = hydrosites)
-
+plot(regulation ~ exotics, data = hydrosites)
 getAllStats(hydrosites, hydrosites$redun, FD)
 getAllStats(hydrosites, hydrosites$exotics, FD)
 
 
+# the story
+
 plot(exotics ~ MDFMDFDry, data = hydrosites)
 plot(redun ~ exotics, data = hydrosites)
 plot(redun ~ MDFMDFDry, data = hydrosites)
+plot(MDFMDFDry~regulation,data=hydrosites)
+plot(exotics ~ regulation,data=hydrosites)
+
+# the story
 
 
 plot(simpson ~ exotics, data = hydrosites)
