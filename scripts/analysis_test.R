@@ -47,15 +47,15 @@ alltraits$maximum.height <- sqrt(alltraits$maximum.height)
 
 # impute missing data using either mice or missForests
 
-  #imputed <- mice(alltraits[,2:7])
-  #alltraits.imputed <- data.frame(cbind(alltraits[1], complete(imputed)))
-  #alltraits <- data.frame(cbind(alltraits.imputed[,1:6], alltraits["leaf.narrowness"],alltraits["wood.density"]))
-  #alltraits$wood.density <- NULL
-  #alltraits$wood.density <- alltraits$wood.density.1
-  #alltraits$wood.density.1 <- NULL
+#  imputed <- mice(alltraits[,2:8])
+#  alltraits.imputed <- data.frame(cbind(alltraits[1], complete(imputed)))
+#  alltraits <- data.frame(cbind(alltraits.imputed[,1:6], alltraits["leaf.narrowness"],alltraits["wood.density"]))
+#  alltraits$wood.density <- NULL
+#  alltraits$wood.density <- alltraits$wood.density.1
+#  alltraits$wood.density.1 <- NULL
   
   
- # imputed <- missForest(alltraits[,2:8], maxiter = 100, ntree= 1000, verbose =TRUE, replace=TRUE, variablewise=TRUE)
+ imputed <- missForest(alltraits[,2:8], maxiter = 100, ntree= 1000, verbose =TRUE, replace=TRUE, variablewise=TRUE)
   alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
   colnames(alltraits.imputed) <- c("Taxon", 
                          "flowering.duration",
@@ -65,14 +65,14 @@ alltraits$maximum.height <- sqrt(alltraits$maximum.height)
                          "SLA",
                           "wood.density",
                          "growthForm")
-  #alltraits.imputed$wood.density <- alltraits$wood.density
-  #alltraits.imputed$leaf.area <- alltraits$leaf.area
-  #alltraits.imputed$seed.mass <- alltraits$seed.mass
-  #alltraits.imputed$maximum.height <- alltraits$seed.mass
-  #alltraits.imputed$growthForm <- alltraits$growthForm
+  alltraits.imputed$wood.density <- alltraits$wood.density
+#  alltraits.imputed$leaf.area <- alltraits$leaf.area
+#  alltraits.imputed$seed.mass <- alltraits$seed.mass
+#  alltraits.imputed$maximum.height <- alltraits$maximum.height
+  alltraits.imputed$growthForm <- alltraits$growthForm
 
 
-  #alltraits <- alltraits.imputed
+  alltraits <- alltraits.imputed
   
   #alltraits <- na.omit(alltraits)
 
@@ -216,8 +216,8 @@ hydro$PC4 <- hydro.pca$x[,4]
 
 
 hydrosites <- merge(hydro, sites, all.y=TRUE, by = c("gaugeID"))
-siteNums <- hydrosites$site
 hydrosites <- hydrosites[order(hydrosites$site),]
+siteNums <- hydrosites$site
 hydrosites <- hydrosites[,4:38]
 
 
@@ -248,6 +248,9 @@ hydrosites$leaf.area <- CWM$leaf.area
 #hydrosites$leaf.narrowness<- CWM$leaf.narrowness
 
 
+hydrosites_imputed <- hydrosites
+
+
 getStats(hydrosites, hydrosites$FDis, FD)
 getStats(hydrosites, hydrosites$FDiv, FD)
 getStats(hydrosites, hydrosites$FRic, FD)
@@ -258,11 +261,11 @@ getStats(hydrosites, hydrosites$RaoQ, FD)
 #getStats(hydrosites, hydrosites$richness, FD)
 
 
-getStats(hydrosites, hydrosites$simpson, FD)
-getStats(hydrosites, hydrosites$FunRao, FD)
-getStats(hydrosites, hydrosites$redun, FD)
-getStats(hydrosites, hydrosites$richness, FD)
-getStats(hydrosites, hydrosites$exotics, FD)
+#getStats(hydrosites, hydrosites$simpson, FD)
+#getStats(hydrosites, hydrosites$FunRao, FD)
+#getStats(hydrosites, hydrosites$redun, FD)
+#getStats(hydrosites, hydrosites$richness, FD)
+#getStats(hydrosites, hydrosites$exotics, FD)
 
 #getStats(hydrosites, hydrosites$SLA, CWM)
 #getStats(hydrosites, hydrosites$seed.mass, CWM)

@@ -41,10 +41,10 @@ plot(FDiv.proportion ~ proportionExotic, data = exotics)
 blaj <- lm(FDis.proportion ~ proportionExotic + I(proportionExotic^2), subset(exotics, FDis.proportion < 3))
 summary(blaj)
 
-hydrosites$exotics <- exotics.x$proportionExotic
+hydrosites$exotics <- exotics$proportionExotic
+#hydrosites$siteCheck <- exotics$site
 
-
-plot(FDis ~ exotics, data = hydrosites)
+plot(FDis ~ exotics, data = hydrosites_imputed)
 plot(FEve ~ exotics, data = hydrosites)
 plot(richness ~ exotics, data = hydrosites)
 plot(FDiv ~ exotics, data = hydrosites)
@@ -52,7 +52,7 @@ plot(FRic ~ exotics, data = hydrosites)
 plot(redun ~ exotics, data = hydrosites)
 plot(RaoQ ~ exotics, data = hydrosites)
 plot(regulation ~ exotics, data = hydrosites)
-getAllStats(hydrosites, hydrosites$redun, FD)
+
 getAllStats(hydrosites, hydrosites$exotics, FD)
 
 
@@ -67,15 +67,23 @@ plot(exotics ~ regulation,data=hydrosites)
 # the story
 
 
-plot(simpson ~ exotics, data = hydrosites)
-plot(simpson ~ regulation, data = hydrosites)
-plot(FEve ~ regulation, data = hydrosites)
-
 plot.quad(hydrosites, hydrosites$exotics, FD)
 plot.quad(hydrosites, hydrosites$FDis, FD)
 plot.quad(hydrosites, hydrosites$redun, FD)
 
-hydrosites$simpson <- FD.redun$Simpson
-hydrosites$FunRao <- FD.redun$FunRao
-hydrosites$redun <- FD.redun$FunRedundancy
+
+
+
+summary(lm(FDis ~ regulation + I(regulation^2), data = hydrosites_unimputed))
+plot(FDis ~ regulation, data = hydrosites_unimputed)
+summary(lm(FDis ~ regulation + I(regulation^2), data = hydrosites_imputed))
+plot(FDis ~ regulation, data = hydrosites_imputed)
+
+summary(lm(FDis ~ exotics + I(exotics^2), data = hydrosites_unimputed))
+plot(FDis ~ exotics, data = hydrosites_unimputed)
+summary(lm(FDis ~ exotics + I(exotics^2), data = hydrosites_imputed))
+plot(FDis ~ exotics, data = hydrosites_imputed)
+
+summary(lm(exotics ~ regulation + I(regulation^2), data = hydrosites_unimputed))
+plot(exotics ~ regulation, data = hydrosites_unimputed)
 
