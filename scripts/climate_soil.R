@@ -1,5 +1,7 @@
 # CLIMATE #
 require(MASS)
+require(MuMIn)
+require(car)
 
 hydro <- read.csv("data/hydro_1975-2008.csv", header=T)
 sites <- read.csv("data/sites.csv", header=T)
@@ -81,20 +83,36 @@ biplot(alldata.pca)
 
   # FDis
 
+# exotics included in FDis.sig depending on whether quad (sig) or linear (non-sig) p val is used
+
 FDis.sig <- data.frame(cbind(alldata["regulation"], 
                                      alldata["C_MaxM"], 
                                      alldata["PS10YrARI"],
                                      alldata["LSPeak"],
-                                     alldata["soil_awc"]))
+                                     alldata["soil_awc"],
+                                     alldata["exotics"]))
 FDis.sig.pca <- prcomp(na.omit(FDis.sig), center=TRUE, scale=TRUE, retx =TRUE)
 summary(FDis.sig.pca)
 biplot(FDis.sig.pca)
 
-FDis.lm <- lm(FDis ~ C_MaxM + PS10YrARI + LSPeak + soil_awc + regulation, data = na.omit(alldata))
+FDis.lm <- lm(FDis ~ C_MaxM + PS10YrARI + LSPeak + soil_awc + regulation + exotics, data = na.omit(alldata))
 stepAIC(FDis.lm, direction="both")
 
-FDis.lm.opt <- lm(FDis ~ C_MaxM + regulation, data = alldata)
+FDis.lm.opt <- lm(FDis ~ C_MaxM + regulation , data = alldata)
 summary(FDis.lm.opt)
+
+FDis.lm.opt2 <- lm(FDis ~ C_MaxM + I(C_MaxM^2) + regulation + I(regulation^2), data = alldata)
+summary(FDis.lm.opt)
+
+FDis.lm.opt3a <- lm(formula = FDis ~ C_MaxM + PS10YrARI + regulation, 
+                   data = na.omit(alldata))
+
+FDis.lm.opt3b <- lm(formula = FDis ~ C_MaxM + PS10YrARI + regulation + exotics, 
+                    data = na.omit(alldata))
+
+AICc(FDis.lm, FDis.lm.opt, FDis.lm.opt2, FDis.lm.opt3a, FDis.lm.opt3b) 
+
+vif(FDis.lm.opt3b)
 
   # exotics
 
@@ -175,7 +193,7 @@ exotics4.lm <- lm(FDis ~ regulation + I(regulation^2), data = alldata)
 AICc(exotics1.lm, exotics2.lm, exotics3.lm, exotics4.lm)
 
 
-
+vif(exotics2.lm)
 
 # richness
 
@@ -225,7 +243,8 @@ richness.lm2a <- lm(formula = richness ~ clim_pwmt + clim_trng  + clim_tavg + I(
                    data = alldata)
 summary(richness.lm2a)
 richness.lm3 <- lm(richness ~ exotics, data = alldata)
-
+richness.lm3a <- lm(richness ~ exotics + I(exotics^2), data = alldata)
+summary(richness.lm3a)
 richness.lm.int1 <- lm(richness ~ clim_pwmt * clim_trng * clim_tavg * exotics, alldata)
 stepAIC(richness.lm.int1)
 
@@ -236,7 +255,7 @@ richness.lm.int2 <- lm(formula = richness ~ clim_pwmt + clim_trng + clim_tavg + 
 summary(richness.lm.int2)
 
 
-AICc(richness.lm1,richness.lm2,richness.lm2a,richness.lm3,richness.lm.int1,richness.lm.int2)
+AICc(richness.lm1,richness.lm2,richness.lm2a,richness.lm3,richness.lm3a,richness.lm.int1,richness.lm.int2)
 
 
 plot(richness ~ exotics, alldata)

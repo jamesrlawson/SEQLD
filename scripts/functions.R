@@ -116,7 +116,32 @@ missing <- function(df) { # finds number of NA values in each row
 }
 
 
-
+compare.hydro <- function(df1,df2) {
+  
+  z <- data.frame(matrix(NA, nrow = 20))
+  
+  for(i in 1:ncol(df1)) {
+    
+    y <- data.frame()
+    
+    metric <- colnames(df1[i])
+    
+    for(j in 1:nrow(df1)) {
+      
+      x <- (df1[j,metric]/df2[j,metric]) - 1
+      
+      y <- rbind(y,x)
+      
+    }
+    
+    z <- cbind(z,y)
+  }
+  
+  z <- z[,-1]
+  colnames(z) <- colnames(df1)
+  
+  return(z)
+}
 
 
 ###### PLOTTING #######

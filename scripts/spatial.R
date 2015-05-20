@@ -1,4 +1,4 @@
-SPATIAL AUTOCORRELATION TEST ##
+## SPATIAL AUTOCORRELATION TEST ##
 
 require(ade4)
 require(FD)
@@ -33,6 +33,7 @@ alldata <- merge(climate, hydrosites2, by=c("site"))
 alldata <- alldata[,7:71]
 
 hydro.gowdis <- gowdis(alldata[,32:65])
+#hydro_change.gowdis <- gowdis(alldata1[)
 clim.gowdis <- gowdis(alldata[,1:19])
 soil.gowdis <- gowdis(alldata[,20:31])
 

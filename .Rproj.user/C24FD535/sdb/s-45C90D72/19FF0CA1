@@ -1,0 +1,17 @@
+{
+    "contents" : "getAllStats(alldata1.short, alldata1.short$FDis, FD)\ngetAllStats(alldata1.short, alldata1.short$exotics, FD)\ngetAllStats(alldata1.short, alldata1.short$richness, FD)\n\n\n#write.csv(alldata1, \"output/alldata1.csv\")\n\n# modelling FDis, exotics, richness according to hydrological change\n\n# richness\n\nrichness.hydrochange.lm <- lm(richness ~ M_MinM.y + M_MDFM.y + exotics + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, data = alldata1.short)\nstepAIC(richness.hydrochange.lm, direction =\"both\")\n\nrichness.hydrochange.lm1 <- lm(formula = richness ~ exotics + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, \n                               data = alldata1[, 67:116])\n\nsummary(richness.hydrochange.lm)\nsummary(richness.hydrochange.lm1)\n\nAICc(richness.hydrochange.lm, richness.hydrochange.lm1)\n\n# FDis \n\nFDis.hydrochange.lm <- lm(FDis ~ C_MDFM.y + MDFAnnHSNum.y + exotics + LSMeanDur.y+ CVAnnBFI.y+ C_MinM.y+ CVAnnHSMeanDur.y, alldata1.short)\nstepAIC(FDis.hydrochange.lm, direction = \"both\")\n\nFDis.hydrochange.lm1 <- lm(formula = FDis ~ C_MDFM.y + MDFAnnHSNum.y + C_MinM.y, data = alldata1.short)\n\nsummary(FDis.hydrochange.lm)\nsummary(FDis.hydrochange.lm1)\n\nAICc(FDis.hydrochange.lm, FDis.hydrochange.lm1)\n\n# exotics\n\nexotics.hydrochange.signif <- data.frame(cbind(alldata1.short[\"C_MDFM.y\"],\n                                               alldata1.short[\" C_MinM.y\"],\n                                               alldata1.short[\"CVAnnMRateFall.y\"],\n                                               alldata1.short[\"BFI.y\"],  \n                                               alldata1.short[\"LSMeanDur.y\"], \n                                               alldata1.short[\"CVAnnLSNum.y\"],  \n                                               alldata1.short[\"HSMeanDur.y\"]))\n\nexotics.hydrochange.lm <- lm(exotics ~ C_MDFM.y + C_MinM.y + CVAnnMRateFall.y + BFI.y + LSMeanDur.y + CVAnnLSNum.y + HSMeanDur.y, data = alldata1.short)\nstepAIC(exotics.hydrochange.lm, direction=\"both\") # produces maximal model\n\nsummary(exotics.hydrochange.lm)\n",
+    "created" : 1432090915430.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "2836417959",
+    "id" : "19FF0CA1",
+    "lastKnownWriteTime" : 21392300099829876,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled5"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
