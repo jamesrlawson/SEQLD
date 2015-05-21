@@ -67,28 +67,35 @@ getAllStats(alldata1.short, alldata1.short$richness, FD)
 
   # richness
 
-    richness.hydrochange.lm <- lm(richness ~ M_MinM.y + M_MDFM.y + exotics + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, data = alldata1.short)
-    stepAIC(richness.hydrochange.lm, direction ="both")
-    
-    richness.hydrochange.lm1 <- lm(formula = richness ~ exotics + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, 
-       data = alldata1[, 67:116])
-    
-    summary(richness.hydrochange.lm)
-    summary(richness.hydrochange.lm1)
-    
-    AICc(richness.hydrochange.lm, richness.hydrochange.lm1)
+  richness.hydrochange.lm <- lm(richness ~ M_MinM.y + M_MDFM.y + exotics + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, data = alldata1.short)
+  stepAIC(richness.hydrochange.lm, direction ="both")
+
+  richness.hydrochange.lm1 <- lm(formula = richness ~ exotics + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, data = alldata1[, 67:116])
+  
+  richness.hydrochange.lm2 <- lm(richness ~ clim_pwmt + clim_trng + soil_phc + clim_tcld + clim_tavg + M_MaxM.x + HSMeanDur.x + exotics + CVAnnLSMeanDur.x + M_MinM.y + M_MDFM.y + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, alldata1)
+  stepAIC(richness.hydrochange.lm2, direction="both")
+  
+  richness.hydrochange.lm3 <- lm(formula = richness ~ clim_pwmt + clim_trng + clim_tcld + HSMeanDur.x + 
+                                   exotics + CVAnnLSMeanDur.x + M_MinM.y + M_MDFM.y + M_MaxM.y + MDFMDFDry.y + C_MDFM.y, data = alldata1)  
+  
+  AICc(richness.hydrochange.lm, richness.hydrochange.lm1, richness.hydrochange.lm2, richness.hydrochange.lm3)
+
+  vif(richness.hydrochange.lm3) # lots of autocorrelation!
 
   # FDis 
 
     FDis.hydrochange.lm <- lm(FDis ~ C_MDFM.y + MDFAnnHSNum.y + exotics + LSMeanDur.y+ CVAnnBFI.y+ C_MinM.y+ CVAnnHSMeanDur.y, alldata1.short)
     stepAIC(FDis.hydrochange.lm, direction = "both")
     
-    FDis.hydrochange.lm1 <- lm(formula = FDis ~ C_MDFM.y + MDFAnnHSNum.y + C_MinM.y, data = alldata1[,67:116])
+    FDis.hydrochange.lm1 <- lm(formula = FDis ~ C_MDFM.y + MDFAnnHSNum.y + C_MinM.y, data = alldata1.short)
+    FDis.hydrochange.lm2 <- lm(formula = FDis ~ C_MDFM.y + MDFAnnHSNum.y + C_MinM.y + soil_awc, data = alldata1)
     
     summary(FDis.hydrochange.lm)
     summary(FDis.hydrochange.lm1)
-
-    AICc(FDis.hydrochange.lm, FDis.hydrochange.lm1)
+    summary(FDis.hydrochange.lm2)
+    
+    
+    AICc(FDis.hydrochange.lm, FDis.hydrochange.lm1, FDis.hydrochange.lm2)
 
   # exotics
 
@@ -112,4 +119,11 @@ getAllStats(alldata1.short, alldata1.short$richness, FD)
     exotics.hydrochange.lm1 <- lm(exotics ~ HSMeanDur.y + LSMeanDur.y + C_MDFM.y + C_MinM.y + CVAnnMRateFall.y, alldata1.short)
     summary(exotics.hydrochange.lm1)
 
-    AICc(exotics.hydrochange.lm, exotics.hydrochange.lm1)
+    exotics.hydrochange.lm2 <- lm(exotics ~ HSMeanDur.y + LSMeanDur.y + C_MDFM.y + C_MinM.y + CVAnnMRateFall.y + clim_pwrm + soil_nto, data = alldata1)
+    summary(exotics.hydrochange.lm2)
+    vif(exotics.hydrochange.lm2)
+
+    AICc(exotics.hydrochange.lm, exotics.hydrochange.lm1, exotics.hydrochange.lm2)
+
+
+

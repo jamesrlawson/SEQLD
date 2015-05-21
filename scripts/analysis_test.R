@@ -9,6 +9,7 @@ library(ggplot2)
 library(missForest)
 library(mice)
 library(SYNCSA)
+library(fossil)
 
 
 alltraits <- read.csv("data/alltraits.csv", header=T)
@@ -89,9 +90,20 @@ levels(vegSurveys$Taxon) <- capitalise(levels(vegSurveys$Taxon)) # make sure spp
 
 # find unmodified species richness
 
+#richness <- ddply(vegSurveys, .(site, Taxon), summarise, sum = sum(count))
+#richness$sum[richness$sum>0] <- 1 # convert counts to presabs
+#richness <- ddply(richness, .(site), summarise, richness = sum(sum))
+
+
+transectArea <- ddply(vegSurveys, .(site), summarise, transectArea = sum(unique((transect.area))))
 richness <- ddply(vegSurveys, .(site, Taxon), summarise, sum = sum(count))
 richness$sum[richness$sum>0] <- 1 # convert counts to presabs
 richness <- ddply(richness, .(site), summarise, richness = sum(sum))
+richness$transectArea <- transectArea$transectArea
+richness$richness.stand <- richness$richness / richness$transectArea
+
+rich.estimated <- rich.est(vegSurveys)
+
 
 # include only species with more than X occurrences at any site
 
@@ -234,7 +246,7 @@ hydrosites$FunRao <- FD.redun$FunRao
 hydrosites$redun <- FD.redun$FunRedundancy
 hydrosites$nbsp <- FD$nbsp
 
-hydrosites$richness <- richness$richness
+hydrosites$richness <- richness.estimated$ACE
 hydrosites$exotics <- exotics.x$proportionExotic
 
 CWM <- FD$CWM

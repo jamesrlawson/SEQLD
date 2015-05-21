@@ -1,0 +1,17 @@
+{
+    "contents" : "library(fossil)\nvegSurveys <- read.csv(\"data/vegSurveys.csv\", header=T)\n\n# linear standardisation by combined transect area\n\ntransectArea <- ddply(vegSurveys, .(site), summarise, transectArea = sum(unique((transect.area))))\nrichness <- ddply(vegSurveys, .(site, Taxon), summarise, sum = sum(count))\nrichness$sum[richness$sum>0] <- 1 # convert counts to presabs\nrichness <- ddply(richness, .(site), summarise, richness = sum(sum))\nrichness$transectArea <- transectArea$transectArea\nrichness$richness.stand <- richness$richness / richness$transectArea\n\n\nplot(richness ~ transectArea, richness)\nplot(richness ~ richness.stand, richness)\n\nplot(richness ~ exotics, alldata)\nsummary(lm(richness ~ exotics, alldata))\nsummary(lm(richness ~ exotics + I(exotics^2), alldata))\n\nplot(richness$richness.stand ~ alldata$exotics)\nsummary(lm(richness$richness.stand ~ alldata$exotics))\nsummary(lm(richness$richness.stand ~ alldata$exotics + I(alldata$exotics^2)))\n\n# rarefaction curves etc.\n\n\nvegSurveys.1 <- subset(vegSurveys, site==1)[,4:255]\nchao1(vegSurveys.1[,4:255], taxa.row=FALSE)\n\nspp.est(t(vegSurveys.1))\n\n\n\nrich.est <- function(df) {\n\n  rich <- data.frame()\n  \n  for(i in 1:length(unique(df$site))) {\n    \n    site <- subset(df, site == i)[,4:255] # this pertains specifically to vegSurveys... \n    \n    site.ACE  <- ACE(site, taxa.row=FALSE)\n    site.chao <- chao1(site, taxa.row=FALSE)\n    site.jack <- jack1(site, taxa.row=FALSE, abund=TRUE)\n    site.boot <- bootstrap(site, taxa.row=FALSE, abund=TRUE)\n    \n    metrics <- data.frame(cbind(site.chao, site.jack, site.ACE, site.boot))\n    \n    rich <- rbind(rich, metrics)\n  \n  }\n  \n  colnames(rich) <- c(\"ACE\", \"chao\", \"jacknife\", \"bootstrap\")\n  return(rich)\n  \n}\n\n\nrich.estimated <- rich.est(vegSurveys)\nrich.estimated$richness <- alldata$richness\nplot(rich.estimated)\n\n\nalldata$richness.chao <- rich.estimated$chao\nalldata$richness.ACE <- rich.estimated$ACE\n\n\ngetStats(alldata, alldata$richness, FD)\ngetStats(alldata, alldata$richness.stand, FD)\ngetStats(alldata, alldata$richness.chao, FD)\ngetStats(alldata, alldata$richness.ACE, FD)\n",
+    "created" : 1432176518976.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "34|26|56|0|\n",
+    "hash" : "3894322148",
+    "id" : "A8AFE9D2",
+    "lastKnownWriteTime" : 26177421948813312,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

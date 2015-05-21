@@ -1,0 +1,17 @@
+{
+    "contents" : "library(vegan)\ndata(varespec)\ndata(varechem)\n\nstr(varechem)\nsummary(varechem)\n\nplot(varechem, gap=0, panel=panel.smooth)\n\n\n\n",
+    "created" : 1432173119645.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1763926857",
+    "id" : "9B95FC55",
+    "lastKnownWriteTime" : 5642813929664822066,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
