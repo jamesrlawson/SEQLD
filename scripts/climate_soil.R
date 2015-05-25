@@ -18,12 +18,12 @@ hydrosites2 <- hydrosites2[,3:38]
 
 alldata <- merge(climate, hydrosites2, by=c("site"))
 
-alldata <- alldata[,7:79]
+alldata <- alldata[,2:67]
 alldata$gaugeID.y <- NULL
 alldata$gaugeName.x <- NULL
 
 alldata1 <- alldata # for PCA
-alldata1$regulation <- NULL
+#alldata1$regulation <- NULL
 alldata1$PC1 <- NULL
 alldata1$PC2 <- NULL
 alldata1$PC3 <- NULL
@@ -45,7 +45,7 @@ alldata$FunRao <- FD.redun$FunRao
 alldata$redun <- FD.redun$FunRedundancy
 alldata$nbsp <- FD$nbsp
 alldata$richness <- richness$richness
-alldata$exotics <- exotics.x$proportionExotic
+alldata$exotics <- exotics$proportionExotic
 
 alldata$SLA<- CWM$SLA
 alldata$seed.mass <- CWM$seed.mass
@@ -53,6 +53,9 @@ alldata$maximum.height <- CWM$maximum.height
 alldata$flowering.duration <- CWM$flowering.duration
 alldata$wood.density <- CWM$wood.density
 alldata$leaf.area <- CWM$leaf.area
+
+
+alldata$richness.stand <- richness$richness.stand
 
 # getstats
 
@@ -63,6 +66,8 @@ getAllStats(alldata, alldata$FRic, FD)
 getAllStats(alldata, alldata$RaoQ, FD)
 getAllStats(alldata, alldata$simpson, FD)
 getStats(alldata, alldata$richness, FD)
+getStats(alldata, alldata$richness.stand, FD)
+
 getAllStats(alldata, alldata$regulation, FD)
 getStats(alldata, alldata$exotics, FD)
 

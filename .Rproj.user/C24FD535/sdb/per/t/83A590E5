@@ -1,0 +1,17 @@
+{
+    "contents" : "\n\n\n\nhydro_change.pca <- prcomp(alldata1.naomit[,85:116], center=TRUE, stand=TRUE, retx=TRUE)\nbiplot(hydro_change.pca)\nsummary(hydro_change.pca)\nhydro_change.pc1 <- hydro_change.pca$x[,1]\nhydro_change.pc2 <- hydro_change.pca$x[,2]\n\nhydro.pca <- prcomp(alldata1.naomit[,34:66],  center=TRUE, stand=TRUE, retx=TRUE) \nsummary(hydro.pca)\nbiplot(hydro.pca)\nhydro.pc1 <- hydro.pca$x[,1]\nhydro.pc2 <- hydro.pca$x[,2]\n\nclimate.pca <- prcomp(alldata1.naomit[,2:20], center=TRUE, stand=TRUE, retx=TRUE)\nclimate.pc1 <- climate.pca$x[,1]\nsummary(climate.pca)\nbiplot(climate.pca)\n\nsoil.pca <- prcomp(alldata1.naomit[,21:32], center=TRUE, stand=TRUE, retx=TRUE)\nsummary(soil.pca)\nsoil.pc1 <- soil.pca$x[,1]\nsoil.pc2 <- soil.pca$x[,2]\nsoil.pc3 <- soil.pca$x[,3]\n\n\nblah.FDis <- lm(alldata1.naomit$FDis ~ hydro_change.pc1 + hydro_change.pc2 + alldata1.naomit$regulation + hydro.pc1 + hydro.pc2 + climate.pc1 + soil.pc1 + soil.pc2 + soil.pc3)\nx <- dredge(blah.FDis, extra=\"R^2\")\nsubset(x, delta < 4)\nsummary(get.models(x, 1)[[1]])\n\n\nblah.richness <- lm(alldata1.naomit$richness ~ hydro_change.pc1 + hydro_change.pc2 + alldata1.naomit$regulation + hydro.pc1 + hydro.pc2 + climate.pc1 + soil.pc1 + soil.pc2 + soil.pc3)\nx <- dredge(blah.richness, extra=\"R^2\")\nsubset(x, delta < 4)\nsummary(get.models(x, 1)[[1]])\n\nblah.exotics <- lm(alldata1.naomit$exotics ~ hydro_change.pc1 + hydro_change.pc2 + alldata1.naomit$regulation + hydro.pc1 + hydro.pc2 + climate.pc1 + soil.pc1 + soil.pc2 + soil.pc3)\nx <- dredge(blah.exotics, extra=\"R^2\")\nsubset(x, delta < 4)\nsummary(get.models(x, 1)[[1]])\n\n\n\na <- varpart(alldata1.naomit$richness, climate.pc1, hydro_change.pc1, soil.pc1, data = na.omit(alldata1))\nb <- varpart(alldata1.naomit$FDis, alldata1.naomit$regulation, hydro.pc1, soil.pc2)\nc <- varpart(alldata1.naomit$exotics, alldata1.naomit$regulation, hydro.pc2,soil.pc2)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nzap <- capscale(alldata1.naomit[,33:66] ~1, distance=\"gower\")\nsummary(zap)\nsummary(hydro.pca)\n\nzap1 <- capscale(CWM ~1, distance=\"gower\")\n",
+    "created" : 1432358997161.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "740516995",
+    "id" : "83A590E5",
+    "lastKnownWriteTime" : 1432531935,
+    "path" : "C:/Users/James/Desktop/stuff/data/analysis/R/SEQLD/scripts/eigenvector_filtering.R",
+    "project_path" : "scripts/eigenvector_filtering.R",
+    "properties" : {
+        "tempName" : "Untitled5"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

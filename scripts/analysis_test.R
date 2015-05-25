@@ -20,6 +20,8 @@ source_GF <- read.csv("data/source_growthForm1.csv", header=T)
 
 alltraits <- merge(alltraits, source_GF, all.x=TRUE)
 
+source <- data.frame(cbind(alltraits["source"], alltraits["Taxon"])) 
+
 #alltraits <- subset(alltraits, source != "exotic")
 
 #alltraits$source <- NULL
@@ -75,6 +77,9 @@ alltraits$maximum.height <- sqrt(alltraits$maximum.height)
 
   alltraits <- alltraits.imputed
   
+  alltraits <- merge(alltraits, source, all.x=TRUE)
+
+
   #alltraits <- na.omit(alltraits)
 
 
@@ -246,7 +251,7 @@ hydrosites$FunRao <- FD.redun$FunRao
 hydrosites$redun <- FD.redun$FunRedundancy
 hydrosites$nbsp <- FD$nbsp
 
-hydrosites$richness <- richness.estimated$ACE
+hydrosites$richness <- rich.estimated$ACE
 hydrosites$exotics <- exotics.x$proportionExotic
 
 CWM <- FD$CWM

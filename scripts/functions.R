@@ -115,6 +115,30 @@ missing <- function(df) { # finds number of NA values in each row
   
 }
 
+rich.est <- function(df) {
+  
+  rich <- data.frame()
+  
+  for(i in 1:length(unique(df$site))) {
+    
+    site <- subset(df, site == i)[,4:255] # this pertains specifically to vegSurveys... 
+    
+    site.ACE  <- ACE(site, taxa.row=FALSE)
+    site.chao <- chao1(site, taxa.row=FALSE)
+    site.jack <- jack1(site, taxa.row=FALSE, abund=TRUE)
+    site.boot <- bootstrap(site, taxa.row=FALSE, abund=TRUE)
+    
+    metrics <- data.frame(cbind(site.chao, site.jack, site.ACE, site.boot))
+    
+    rich <- rbind(rich, metrics)
+    
+  }
+  
+  colnames(rich) <- c("ACE", "chao", "jacknife", "bootstrap")
+  return(rich)
+  
+}
+
 
 compare.hydro <- function(df1,df2) {
   

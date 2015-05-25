@@ -1,0 +1,17 @@
+{
+    "contents" : "withoutExotics <- cbind(hydrosites[\"FDis\"], hydrosites[\"FRic\"], hydrosites[\"FEve\"], hydrosites[\"FDiv\"])\n\nwithExotics <- cbind(hydrosites[\"FDis\"], hydrosites[\"FRic\"], hydrosites[\"FEve\"], hydrosites[\"FDiv\"])\n\n\n\n\nplot(withExotics$FDiv,withoutExotics$FDiv)\nplot(withExotics$FDis,withoutExotics$FDis)\nplot(withExotics$FEve,withoutExotics$FEve)\nplot(withExotics$FRic,withoutExotics$FRic)\n\n\n# FDwithout/FDwith vs percentage exotics - need abundance weighted FD metrics\n\n\nvegSurveys.ex <- subset(vegSurveys, source == \"exotic\")\n\nexotics <- ddply(vegSurveys.ex, .(site), summarise, proportionExotic = sum(avgPerHa) / totalcover)\nexotics <- unique(exotics)\n\nhydrosites$exotics <- exotics$proportionExotic\n#hydrosites$siteCheck <- exotics$site\n\nplot(FDis ~ exotics, data = hydrosites_imputed)\nplot(FEve ~ exotics, data = hydrosites)\nplot(richness ~ exotics, data = hydrosites)\nplot(FDiv ~ exotics, data = hydrosites)\nplot(FRic ~ exotics, data = hydrosites)\nplot(redun ~ exotics, data = hydrosites)\nplot(RaoQ ~ exotics, data = hydrosites)\nplot(regulation ~ exotics, data = hydrosites)\n\n",
+    "created" : 1431398369046.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "911636043",
+    "id" : "AFAF9E5A",
+    "lastKnownWriteTime" : 1432533393,
+    "path" : "C:/Users/James/Desktop/stuff/data/analysis/R/SEQLDold/scripts/exotics.R",
+    "project_path" : "scripts/exotics.R",
+    "properties" : {
+        "tempName" : "Untitled5"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

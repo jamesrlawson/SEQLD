@@ -1,0 +1,17 @@
+{
+    "contents" : "plot(FDis ~ exotics, alldata1)\nplot(FDis ~ regulation, alldata1)\n\nplot(exotics ~ regulation, alldata1)\n\nplot(richness ~ exotics, alldata1)\nplot(richness ~ regulation, alldata1)\n\n\n\n\n",
+    "created" : 1432097210179.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1338290177",
+    "id" : "C48C6DFF",
+    "lastKnownWriteTime" : 3618414895499321376,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
