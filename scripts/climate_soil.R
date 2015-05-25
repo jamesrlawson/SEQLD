@@ -22,15 +22,31 @@ alldata <- alldata[,2:67]
 alldata$gaugeID.y <- NULL
 alldata$gaugeName.x <- NULL
 
-alldata1 <- alldata # for PCA
-#alldata1$regulation <- NULL
-alldata1$PC1 <- NULL
-alldata1$PC2 <- NULL
-alldata1$PC3 <- NULL
-alldata1$PC4 <- NULL
-alldata1 <- data.frame(cbind(alldata1[,1:19], alldata1[,32:65]))
 
+# PCA's 
 
+clim.pca <- prcomp(alldata[,2:20], center=TRUE, scale=TRUE)
+soil.pca <- prcomp(alldata[,21:32], center=TRUE, scale=TRUE)
+hydro.pca <- prcomp(alldata[,33:65], center=TRUE, scale=TRUE)
+
+summary(clim.pca)
+summary(soil.pca)
+summary(hydro.pca)
+
+alldata$clim.pc1 <- clim.pca$x[,1]
+alldata$clim.pc2 <- clim.pca$x[,2]
+
+alldata$soil.pc1 <- soil.pca$x[,1]
+alldata$soil.pc2 <- soil.pca$x[,2]
+alldata$soil.pc3 <- soil.pca$x[,3]
+alldata$soil.pc4 <- soil.pca$x[,3]
+
+alldata$hydro.pc1 <- hydro.pca$x[,1]
+alldata$hydro.pc2 <- hydro.pca$x[,2]
+alldata$hydro.pc3 <- hydro.pca$x[,3]
+alldata$hydro.pc4 <- hydro.pca$x[,4]
+
+#
 
 alldata$site <- siteNums
 alldata$FDis <- FD$FDis
