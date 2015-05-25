@@ -1,0 +1,17 @@
+{
+    "contents" : "alldata1$replicate <- sites$replicate\nalldata1$exotics <- hydrosites$exotics\n\nrep1 <- subset(alldata1, replicate == 1)\nrep2 <- subset(alldata1, replicate == 2)\n\nCWM$replicate <- sites$replicate\n\nplot(rep1$SLA, rep2$SLA)\nplot(rep1$seed.mass, rep2$seed.mass)\nplot(rep1$FDis, rep2$FDis)\nplot(rep1$richness, rep2$richness)\nplot(rep1$exotics, rep2$exotics)\nplot(rep1$FRic, rep2$FRic)\n\n\nrequire(nlme)\n\nx <- lme(exotics ~ regulation, random = ~1|replicate, na.omit(alldata1))\nx1 <- lme(FDis ~ C_MaxM.x, random = ~1|replicate, na.omit(alldata1))\nx2 <- lme(FDis ~ regulation + C_MaxM.x, random = ~1|replicate, na.omit(alldata1))\nsummary(x)\n\nx <- lme(richness ~ regulation, random = ~1|replicate, na.omit(alldata1))\n",
+    "created" : 1432532015018.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "3798157375",
+    "id" : "E626FF42",
+    "lastKnownWriteTime" : 1432531912,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

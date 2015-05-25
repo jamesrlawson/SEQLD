@@ -1,0 +1,17 @@
+{
+    "contents" : "require(vegan)\nrequire(ade4)\n\n\n#alltraits <- read.csv(\"data/alltraits.csv\", header=T)\n\n\nstr(alltraits)\n\n\ntraits.kQ <- data.frame(alltraits[,c(1,3:7)])\ntraits.kC <- data.frame(alltraits[,2])\n  traits.kC <- prep.circular(traits.kC)\ntraits.kN <- data.frame(alltraits[,8])\n\ntraits.k <- list(traits.kQ, traits.kC, traits.kN)\n\ntraits.ktab <- ktab.list.df(traits.k, rownames=rownames(alltraits))\n\ntraits.dist.ktab <- dist.ktab(traits.ktab, type=c(\"Q\", \"C\", \"N\"))\n\n\nFD <- dbFD(traits.dist.ktab, \n           abun,\n           w.abun = TRUE,  \n           stand.x = TRUE,\n           corr = c(\"cailliez\"),\n           #                calc.FGR = TRUE, \n           #                clust.type = c(\"kmeans\"),\n           #                km.inf.gr = c(2),\n           #                km.sup.gr = c(10),\n           #                km.iter = (100),\n           calc.FDiv = TRUE, \n           calc.FRic = TRUE,\n           #           m = \"max\",\n           calc.CWM=TRUE, \n           print.pco=TRUE, \n           #                      scale.RaoQ=TRUE, \n           stand.FRic=TRUE\n)\n",
+    "created" : 1432516262560.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "819383322",
+    "id" : "1398940C",
+    "lastKnownWriteTime" : 31244173393002613,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

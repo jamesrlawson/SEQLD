@@ -107,7 +107,8 @@ richness <- ddply(richness, .(site), summarise, richness = sum(sum))
 richness$transectArea <- transectArea$transectArea
 richness$richness.stand <- richness$richness / richness$transectArea
 
-rich.estimated <- rich.est(vegSurveys)
+vegSurveysx <- read.csv("data/vegSurveys.csv", header=T)
+rich.estimated <- rich.est(vegSurveysx)
 
 
 # include only species with more than X occurrences at any site
