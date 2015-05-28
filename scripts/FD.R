@@ -39,11 +39,11 @@ alltraits$X <- NULL
 # normalise data
 
 alltraits$SLA <- log10(alltraits$SLA)
-alltraits$leaf.area <- sqrt(alltraits$leaf.area)
+#alltraits$leaf.area <- sqrt(alltraits$leaf.area)
 alltraits$seed.mass <- log10(alltraits$seed.mass)
 alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
 alltraits$maximum.height <- sqrt(alltraits$maximum.height)
-#alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
+alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
 
 # impute missing data using missForests
 
@@ -51,7 +51,8 @@ alltraits$maximum.height <- sqrt(alltraits$maximum.height)
   alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
   colnames(alltraits.imputed) <- c("Taxon", 
                          "flowering.duration",
-                          "leaf.area",
+#                          "leaf.area",
+                         "leaf.narrowness",
                          "maximum.height",
                          "seed.mass",
                          "SLA",
@@ -241,8 +242,8 @@ hydrosites$seed.mass <- CWM$seed.mass
 hydrosites$maximum.height <- CWM$maximum.height
 hydrosites$flowering.duration <- CWM$flowering.duration
 hydrosites$wood.density <- CWM$wood.density
-hydrosites$leaf.area <- CWM$leaf.area
-#hydrosites$leaf.narrowness<- CWM$leaf.narrowness
+#hydrosites$leaf.area <- CWM$leaf.area
+hydrosites$leaf.narrowness<- CWM$leaf.narrowness
 
 
 hydrosites_imputed <- hydrosites

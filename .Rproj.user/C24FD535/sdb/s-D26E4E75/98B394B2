@@ -1,0 +1,18 @@
+{
+    "contents" : "landuse <- read.csv(\"data/landuse.csv\", header=TRUE)\n\nlanduse1 <- landuse\nlanduse1$FDis <- alldata1$FDis \nlanduse1$FRic <- alldata1$FRic\nlanduse1$FDiv <- alldata1$FDiv\nlanduse1$FEve <- alldata1$FDiv\n\nlanduse1$exotics <- alldata1$exotics\nlanduse1$richness <- richness$richness.stand.ACE\n\ngetAllStats(landuse1, landuse1$FDis, FD)\ngetAllStats(landuse1, landuse1$FRic, FD)\ngetAllStats(landuse1, landuse1$FDiv, FD)\ngetAllStats(landuse1, landuse1$FEve, FD)\n\ngetAllStats(landuse1, landuse1$richness, FD)\ngetAllStats(landuse1, landuse1$exotics, FD)\n\n\nblah <- lm(exotics ~ production_natural_w + I(production_natural_w^2) +\n             production_dryland_w\t + I(production_dryland_w^2) +\n             intensive_w\t+ I(intensive_w^2) +\n             conservation_w\t+ I(conservation_w^2) + \n             production_irrigated_w + I(production_irrigated_w^2), \n             data = landuse1)\n\nblah <- lm(richness ~ production_natural_w +\n             production_dryland_w   +\n             intensive_w\t+\n             conservation_w\t+ \n             production_irrigated_w , \n           data = landuse1)\n\nblah.dredge <- dredge(blah, extra = c(\"adjR^2\", \"R^2\"))\nsubset(blah.dredge, delta < 4)\n\nsummary(blah)\n\nblah.2 <- lm(exotics ~ conservation_w * production_irrigated_w * production_natural_w, data = landuse1)\ndredge(blah.2)\n\nblah.3 <- lm(exotics ~  conservation_w + production_irrigated_w + production_natural_w + \n                        conservation_w:production_irrigated_w + production_irrigated_w:production_natural_w, data = landuse1)\n\nsummary(blah.3)\nvif(blah.3)\n",
+    "created" : 1432693227910.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1940494963",
+    "id" : "98B394B2",
+    "lastKnownWriteTime" : 1432689813,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled5"
+    },
+    "relative_order" : 0,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

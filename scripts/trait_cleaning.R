@@ -273,31 +273,31 @@ traits.leaf.narrowness$Taxon <- as.factor(traits.leaf.narrowness$Taxon)
   # find average trait values
 
   traits.SLA_avg <- ddply(traits.SLA, .(Taxon), summarise, avg = mean(SLA), CV = CV(SLA), n = length(SLA))
-  traits.leafarea_avg <- ddply(traits.leafarea, .(Taxon), summarise, avg = mean(leaf.area), CV = CV(leaf.area), n = length(leaf.area))
+#  traits.leafarea_avg <- ddply(traits.leafarea, .(Taxon), summarise, avg = mean(leaf.area), CV = CV(leaf.area), n = length(leaf.area))
   traits.WD_avg <- ddply(traits.WD, .(Taxon), summarise, avg = mean(wood.density), CV = CV(wood.density), n = length(wood.density))
 #  traits.maxheight_avg <- ddply(traits.maxheight_sansvines, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
   traits.maxheight_avg <- ddply(traits.maxheight, .(Taxon), summarise, avg = mean(maximum.height), CV = CV(maximum.height), n = length(maximum.height))
   traits.seedmass_avg <- ddply(traits.seedmass, .(Taxon), summarise, avg = mean(seed.mass), CV = CV(seed.mass), n = length(seed.mass))
   traits.flowering.duration_avg <- ddply(traits.flowering.duration, .(Taxon), summarise, avg = mean(flowering.duration), CV = CV(flowering.duration), n = length(flowering.duration))
-#  traits.leaf.narrowness_avg <- ddply(traits.leaf.narrowness, .(Taxon), summarise, avg = mean(leaf.narrowness), CV = CV(leaf.narrowness), n = length(leaf.narrowness))
+  traits.leaf.narrowness_avg <- ddply(traits.leaf.narrowness, .(Taxon), summarise, avg = mean(leaf.narrowness), CV = CV(leaf.narrowness), n = length(leaf.narrowness))
 
   traits.SLA_avg$trait <- c("SLA")
-  traits.leafarea_avg$trait <- c("leaf.area")
+#  traits.leafarea_avg$trait <- c("leaf.area")
   traits.WD_avg$trait <- c("wood.density")
   traits.maxheight_avg$trait <- c("maximum.height")
   traits.seedmass_avg$trait <- c("seed.mass")
   traits.flowering.duration_avg$trait <- c("flowering.duration")
-#  traits.leaf.narrowness_avg$trait <- c("leaf.narrowness")
+  traits.leaf.narrowness_avg$trait <- c("leaf.narrowness")
 
   # combine and transform from long to wide format
 
   alltraits <- rbind(traits.SLA_avg, 
-                     traits.leafarea_avg,
+#                     traits.leafarea_avg,
                      traits.WD_avg,
                      traits.maxheight_avg,
                      traits.seedmass_avg,
-                     traits.flowering.duration_avg)#,
- #                    traits.leaf.narrowness_avg)
+                     traits.flowering.duration_avg,
+                     traits.leaf.narrowness_avg)
 
   #alltraits$Taxon <- as.character(alltraits$Taxon)
   #alltraits$Taxon <- as.factor(alltraits$Taxon)
@@ -307,12 +307,12 @@ traits.leaf.narrowness$Taxon <- as.factor(traits.leaf.narrowness$Taxon)
   # fix some type and formatting issues
 
   alltraits$SLA <- as.numeric(alltraits$SLA)
-  alltraits$leaf.area <- as.numeric(alltraits$leaf.area)
+#  alltraits$leaf.area <- as.numeric(alltraits$leaf.area)
   alltraits$wood.density <- as.numeric(alltraits$wood.density)
   alltraits$maximum.height <- as.numeric(alltraits$maximum.height)
   alltraits$seed.mass <- as.numeric(alltraits$seed.mass)
   alltraits$flowering.duration <- as.numeric(alltraits$flowering.duration)
-#  alltraits$leaf.narrowness <- as.numeric(alltraits$leaf.narrowness)
+  alltraits$leaf.narrowness <- as.numeric(alltraits$leaf.narrowness)
 
   alltraits$X <- NULL
 
@@ -324,6 +324,6 @@ traits.leaf.narrowness$Taxon <- as.factor(traits.leaf.narrowness$Taxon)
 
   write.csv(alltraits, "data/alltraits.csv")
  
-  rm(list = ls())
+#  rm(list = ls())
 
 

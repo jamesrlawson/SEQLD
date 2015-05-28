@@ -12,26 +12,23 @@ climate <- data.frame(cbind(climate[,7:37], site = climate.site))
 
 hydro$MDF <- NULL
 
-hydrosites2 <- merge(hydro, sites, all.y=TRUE, by = c("gaugeID"))
-hydrosites2 <- hydrosites2[order(hydrosites2$site),]
-hydrosites2 <- hydrosites2[,3:38]
+hydrosites2 <- hydrosites[order(hydrosites$site),]
+#hydrosites2 <- hydrosites2[,1:40]
 
 alldata <- merge(climate, hydrosites2, by=c("site"))
 
-alldata <- alldata[,2:67]
-alldata$gaugeID.y <- NULL
-alldata$gaugeName.x <- NULL
+#alldata <- alldata[,2:71]
 
 
 # PCA's 
 
 clim.pca <- prcomp(alldata[,2:20], center=TRUE, scale=TRUE)
 soil.pca <- prcomp(alldata[,21:32], center=TRUE, scale=TRUE)
-hydro.pca <- prcomp(alldata[,33:65], center=TRUE, scale=TRUE)
+#hydro.pca <- prcomp(alldata[,33:65], center=TRUE, scale=TRUE)
 
 summary(clim.pca)
 summary(soil.pca)
-summary(hydro.pca)
+#summary(hydro.pca)
 
 alldata$clim.pc1 <- clim.pca$x[,1]
 alldata$clim.pc2 <- clim.pca$x[,2]
@@ -41,10 +38,10 @@ alldata$soil.pc2 <- soil.pca$x[,2]
 alldata$soil.pc3 <- soil.pca$x[,3]
 alldata$soil.pc4 <- soil.pca$x[,3]
 
-alldata$hydro.pc1 <- hydro.pca$x[,1]
-alldata$hydro.pc2 <- hydro.pca$x[,2]
-alldata$hydro.pc3 <- hydro.pca$x[,3]
-alldata$hydro.pc4 <- hydro.pca$x[,4]
+#alldata$hydro.pc1 <- hydro.pca$x[,1]
+#alldata$hydro.pc2 <- hydro.pca$x[,2]
+#alldata$hydro.pc3 <- hydro.pca$x[,3]
+#alldata$hydro.pc4 <- hydro.pca$x[,4]
 
 #
 
@@ -60,7 +57,7 @@ alldata$simpson <- FD.redun$Simpson
 alldata$FunRao <- FD.redun$FunRao
 alldata$redun <- FD.redun$FunRedundancy
 alldata$nbsp <- FD$nbsp
-alldata$richness <- richness$richness
+alldata$richness <- richness$richness.stand.ACE
 alldata$exotics <- exotics$proportionExotic
 
 alldata$SLA<- CWM$SLA
@@ -69,6 +66,8 @@ alldata$maximum.height <- CWM$maximum.height
 alldata$flowering.duration <- CWM$flowering.duration
 alldata$wood.density <- CWM$wood.density
 alldata$leaf.area <- CWM$leaf.area
+
+
 
 
 alldata$richness.stand <- richness$richness.stand

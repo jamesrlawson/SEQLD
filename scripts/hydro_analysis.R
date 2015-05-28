@@ -2,9 +2,10 @@ require(FD)
 require(reshape)
 require(vegan)
 
-hydro_to1999 <- read.csv("data/hydro_1975-1999.csv")
-hydro_IQQM <- read.csv("data/hydro_IQQM.csv")
-sites <- read.csv("data/sites.csv")
+hydro_to1999 <- read.csv("data/hydro_1975-1999.csv", header=TRUE))
+hydro_IQQM <- read.csv("data/hydro_IQQM.csv", header=TRUE))
+sites <- read.csv("data/sites.csv", header=TRUE))
+landuse <- read.csv("data/landuse.csv", header=TRUE)
 
 # remove Teviot @ Croftby and Burnett at U/S Maroon Dam, as neither have IQQM correlates
 
@@ -50,6 +51,14 @@ hydro_change <- merge(hydro_change, sites, by = "gaugeID")
 hydro_change <- hydro_change[order(hydro_change$site),]
 hydro_change <- hydro_change[,2:34]
 alldata1 <- merge(alldata, hydro_change, by="site", all.x = TRUE, fill="NA")
+
+
+# merge with landuse data
+
+
+alldata1 <- merge(alldata1, landuse, by="site", all.x = TRUE, fill="NA")
+
+
 
 
 # find relationships between FDis, exotics, richness and hydrological change
