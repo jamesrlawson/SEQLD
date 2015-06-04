@@ -116,9 +116,20 @@ landuse <- read.csv("data/landuse.csv", header=TRUE)
     hydro_change <- hydro_change[,2:34]
     alldata1 <- merge(alldata, hydro_change, by="site", all.x = TRUE, fill="NA")
     
+    hydrochange.pca <- prcomp(hydro_change[,1:32], center=TRUE, scale=TRUE, retx=TRUE)
+
+#    hydro_change1 <- hydro_change
+#    hydro_change1$regulation <- alldata1.naomit$regulation
+#    getAllStats(hydro_change1, hydro_change1$regulation, FD)
+#    rm(hydro_change1)
+    
     
 # add in landuse data
     
-    
     alldata1 <- merge(alldata1, landuse, by="site", all.x = TRUE, fill="NA")
+    
+
+    
+    
+    
     

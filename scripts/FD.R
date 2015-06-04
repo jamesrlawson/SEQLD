@@ -39,11 +39,11 @@ alltraits$X <- NULL
 # normalise data
 
 alltraits$SLA <- log10(alltraits$SLA)
-#alltraits$leaf.area <- sqrt(alltraits$leaf.area)
+alltraits$leaf.area <- sqrt(alltraits$leaf.area)
 alltraits$seed.mass <- log10(alltraits$seed.mass)
 alltraits$flowering.duration <- sqrt(alltraits$flowering.duration)
 alltraits$maximum.height <- sqrt(alltraits$maximum.height)
-alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
+#alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
 
 # impute missing data using missForests
 
@@ -51,8 +51,8 @@ alltraits$leaf.narrowness <- log10(alltraits$leaf.narrowness)
   alltraits.imputed <- data.frame(cbind(alltraits[1], as.data.frame(imputed[1])))
   colnames(alltraits.imputed) <- c("Taxon", 
                          "flowering.duration",
-#                          "leaf.area",
-                         "leaf.narrowness",
+                          "leaf.area",
+#                         "leaf.narrowness",
                          "maximum.height",
                          "seed.mass",
                          "SLA",
@@ -116,6 +116,7 @@ vegSurveys$perHa <- vegSurveys$count * 10000 / vegSurveys$transect.area
 
 vegSurveys <- ddply(vegSurveys, .(site, Taxon), summarise, avgPerHa = mean(perHa))
 
+
 vegSurveys_all <- vegSurveys
 
 # find total cover in stems/Ha for each site
@@ -149,8 +150,14 @@ vegSurveys.representedcover  <- merge(ddply(vegSurveys, .(site), summarise, repr
 
 vegSurveys.representedcover$proportion <- vegSurveys.representedcover$representedcover / vegSurveys.representedcover$totalcover
 
+# transform abundance data
+#vegSurveys$avgPerHa <- sqrt(vegSurveys$avgPerHa)
 
-abun <- cast(vegSurveys, site ~ Taxon, value="avgPerHa", fill=0)
+# transform avgPerHa into relative abundance
+vegSurveys$relabun <- vegSurveys$avgPerHa / vegSurveys$totalcover
+
+#abun <- cast(vegSurveys, site ~ Taxon, value="avgPerHa", fill=0)
+abun <- cast(vegSurveys, site ~ Taxon, value="relabun", fill=0)
 
 
 abun <- abun[order(abun$site),]
@@ -242,18 +249,19 @@ hydrosites$seed.mass <- CWM$seed.mass
 hydrosites$maximum.height <- CWM$maximum.height
 hydrosites$flowering.duration <- CWM$flowering.duration
 hydrosites$wood.density <- CWM$wood.density
-#hydrosites$leaf.area <- CWM$leaf.area
-hydrosites$leaf.narrowness<- CWM$leaf.narrowness
+hydrosites$leaf.area <- CWM$leaf.area
+#hydrosites$leaf.narrowness<- CWM$leaf.narrowness
 
 
 hydrosites_imputed <- hydrosites
 
+hydrositesz <- hydrosites[,-36]
 
-getStats(hydrosites, hydrosites$FDis, FD)
-getStats(hydrosites, hydrosites$FDiv, FD)
-getStats(hydrosites, hydrosites$FRic, FD)
-getStats(hydrosites, hydrosites$FEve, FD)
-getStats(hydrosites, hydrosites$RaoQ, FD)
+getStats(hydrositesz, hydrosites$FDis, FD)
+getStats(hydrositesz, hydrosites$FDiv, FD)
+getStats(hydrositesz, hydrosites$FRic, FD)
+getStats(hydrositesz, hydrosites$FEve, FD)
+#getStats(hydrosites, hydrosites$RaoQ, FD)
 #getStats(hydrosites, hydrosites$nbsp, FD)
 
 #getStats(hydrosites, hydrosites$richness, FD)
@@ -265,13 +273,13 @@ getStats(hydrosites, hydrosites$RaoQ, FD)
 #getStats(hydrosites, hydrosites$richness, FD)
 #getStats(hydrosites, hydrosites$exotics, FD)
 
-#getStats(hydrosites, hydrosites$SLA, CWM)
-#getStats(hydrosites, hydrosites$seed.mass, CWM)
-#getStats(hydrosites, hydrosites$maximum.height, CWM)
-#getStats(hydrosites, hydrosites$flowering.duration, CWM)
-#getStats(hydrosites, hydrosites$wood.density, CWM)
-#getStats(hydrosites, hydrosites$leaf.area, CWM)
-#getStats(hydrosites, hydrosites$leaf.narrowness, CWM)
+getStats(hydrositesz, hydrosites$SLA, CWM)
+getStats(hydrositesz, hydrosites$seed.mass, CWM)
+getStats(hydrositesz, hydrosites$maximum.height, CWM)
+getStats(hydrositesz, hydrosites$flowering.duration, CWM)
+getStats(hydrositesz, hydrosites$wood.density, CWM)
+getStats(hydrositesz, hydrosites$leaf.area, CWM)
+#getStats(hydrositesz, hydrosites$leaf.narrowness, CWM)
 
 
 

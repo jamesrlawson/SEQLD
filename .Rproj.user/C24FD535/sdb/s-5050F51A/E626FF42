@@ -1,0 +1,18 @@
+{
+    "contents" : "alldata1$replicate <- sites$replicate\nalldata1$exotics <- hydrosites$exotics\nalldata1$richstand <- richness$richness.stand\nalldata1$richness.stand.chao <- richness$richness.stand.chao\nalldata1$richness.stand.ACE <- richness$richness.stand.ACE\nalldata1$richness.stand.jack <- richness$richness.stand.jack\nalldata1$richness.stand.boot <- richness$richness.stand.boot\n\n\nrep1 <- subset(alldata1, replicate == 1)\nrep2 <- subset(alldata1, replicate == 2)\n\nCWM$replicate <- sites$replicate\n\nplot(rep1$SLA, rep2$SLA)\nplot(rep1$seed.mass, rep2$seed.mass)\nplot(rep1$FDis, rep2$FDis)\nplot(rep1$richness, rep2$richness)\nplot(rep1$exotics, rep2$exotics)\nplot(rep1$FRic, rep2$FRic)\ncor.test(rep1$richstand, rep2$richstand)\ncor.test(rep1$richness.stand.chao, rep2$richness.stand.chao)\nplot(rep1$richness.stand.ACE, rep2$richness.stand.ACE)\ncor.test(rep1$richness.stand.jack, rep2$richness.stand.jack)\ncor.test(rep1$richness.stand.boot, rep2$richness.stand.boot)\n\n\nrequire(nlme)\n\nx <- lme(exotics ~ regulation, random = ~1|replicate, na.omit(alldata1))\nx1 <- lme(FDis ~ C_MaxM.x, random = ~1|replicate, na.omit(alldata1))\nx2 <- lme(FDis ~ regulation + C_MaxM.x, random = ~1|replicate, na.omit(alldata1))\nsummary(x)\n\nx <- lme(richness ~ regulation, random = ~1|replicate, na.omit(alldata1))\n\n",
+    "created" : 1432532015018.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2710144267",
+    "id" : "E626FF42",
+    "lastKnownWriteTime" : 1433386224,
+    "path" : "C:/Users/James/Desktop/stuff/data/analysis/R/SEQLD/scripts/replicates.R",
+    "project_path" : "scripts/replicates.R",
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "relative_order" : 0,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

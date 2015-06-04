@@ -10,8 +10,9 @@ alldata1.naomit <- na.omit(alldata1)
 CWM$regulation <- alldata1$regulation
 CWM.naomit <- na.omit(CWM[,1:6])
 
-
-# what about hydrochange?
+alldata1.naomit$hydrochange.pc1 <- hydrochange.pca$x[,1]
+alldata1.naomit$hydrochange.pc2 <- hydrochange.pca$x[,2]
+alldata1.naomit$hydrochange.pc3 <- hydrochange.pca$x[,3]
 
 allPC <- data.frame(cbind(alldata1.naomit["clim.pc1"],
                           alldata1.naomit["clim.pc2"],
@@ -22,15 +23,28 @@ allPC <- data.frame(cbind(alldata1.naomit["clim.pc1"],
                           alldata1.naomit["hydro.pc2"],
                           alldata1.naomit["hydro.pc3"],
                           alldata1.naomit["regulation"],
+                          alldata1.naomit["production_natural_w"],
+                          alldata1.naomit["production_dryland_w"],
+                          alldata1.naomit["intensive_w"],
+                          alldata1.naomit["conservation_w"],
+                          alldata1.naomit["production_irrigated_w"],
+                          alldata1.naomit["hydrochange.pc1"],
+                          alldata1.naomit["hydrochange.pc2"],
+                          alldata1.naomit["hydrochange.pc3"],
                           alldata1.naomit["FDis"],
                           alldata1.naomit["FRic"],
                           alldata1.naomit["FDiv"],
                           alldata1.naomit["FEve"],
                           alldata1.naomit["richness"],
-                          alldata1.naomit["exotics"]),
-                          alldata1.naomit["replicate"])
+                          alldata1.naomit["exotics"],
+                          alldata1.naomit["replicate"]))
 
 allPC$regulation <- allPC$regulation - mean(allPC$regulation) # center by mean to reduce vif in multiple regressions models
+allPC$production_natural_w <- allPC$production_natural_w - mean(allPC$production_natural_w)
+allPC$production_dryland_w <- allPC$production_dryland_w - mean(allPC$production_dryland_w)
+allPC$production_irrigated_w <- allPC$production_irrigated_w - mean(allPC$production_irrigated_w)
+allPC$conservation_w <- allPC$conservation_w - mean(allPC$conservation_w)
+allPC$intensive_w <- allPC$intensive_w - mean(allPC$intensive_w)
 
 plot(allPC)
 
@@ -39,9 +53,25 @@ getAllStats(allPC, allPC$FDis, FD)
 getAllStats(allPC, allPC$FRic, FD)
 getAllStats(allPC, allPC$FEve, FD)
 getAllStats(allPC, allPC$FDiv, FD)
-
 getAllStats(allPC, allPC$exotics, FD)
 getAllStats(allPC, allPC$richness, FD)
+getAllStats(allPC, allPC$hydrochange.pc1, FD)
+getAllStats(allPC, allPC$hydrochange.pc2, FD)
+getAllStats(allPC, allPC$hydrochange.pc3, FD)
+getAllStats(allPC, allPC$regulation, FD)
+
+getAllStats(alldata1.naomit, alldata1.naomit$FDis, FD)
+getAllStats(alldata1.naomit, alldata1.naomit$FDiv, FD)
+getAllStats(alldata1.naomit, alldata1.naomit$FRic, FD)
+getAllStats(alldata1.naomit, alldata1.naomit$FEve, FD)
+
+getAllStats(alldata1.naomit, alldata1.naomit$richness, FD)
+getAllStats(alldata1.naomit, alldata1.naomit$exotics, FD)
+
+getAllStats(alldata1.naomit, alldata1.naomit$hydro.pc1, FD)
+getAllStats(alldata1.naomit, alldata1.naomit$hydro.pc2, FD)
+getAllStats(alldata1.naomit, alldata1.naomit$regulation, FD)
+
 
 allPC$replicate <- as.factor(allPC$replicate)
 
@@ -62,7 +92,7 @@ plot(FDis.varpart)
 
 
 
-exotics.lm <- lm(exotics ~ hydro.pc1 + hydro.pc2 + hydro.pc3 + hydro.pc4 + clim.pc1 + clim.pc2 + soil.pc1 + soil.pc2 + soil.pc3 + regulation + I(regulation^2), data = allPC)
+exotics.lm <- lm(exotics ~ hydro.pc1 + hydro.pc2 + clim.pc1 + clim.pc2 + soil.pc1 + soil.pc2 + regulation + I(regulation^2) + production_natural_w + production_dryland_w + intensive_w + conservation_w + production_irrigated_w, data = allPC)
 
 
 exotics.glm <- glm(exotics ~ hydro.pc1 + I(hydro.pc1^2) + hydro.pc2 + I(hydro.pc2^2) + clim.pc1 + soil.pc2 + soil.pc3 + regulation + I(regulation^2), data = allPC)
@@ -75,7 +105,14 @@ exotics.dredge <- dredge(exotics.lm)
 subset(exotics.dredge, delta < 4)
 summary(get.models(exotics.dredge, 1)[[1]])
 x <- model.avg(exotics.dredge)
+summary(x)
 
+
+exotics.lm1 <- lm(formula = exotics ~ hydro.pc2 + production_irrigated_w + production_natural_w + 
+     1, data = allPC)
+
+exotics.lm2 <- lm(formula = exotics ~ hydro.pc2 + production_irrigated_w + production_natural_w + regulation +
+                    1, data = allPC)
 
 exotics.dredge <- dredge(exotics.glm, rank = "QAICc", chat = deviance(exotics.glm) / df.residual(exotics.glm))
 subset(exotics.dredge, delta < 4)
@@ -85,11 +122,12 @@ summary(model.avg(exotics.dredge))
 
 
 exotics.varpart1 <- varpart(allPC$exotics, ~ hydro.pc1 + I(hydro.pc1^2) + hydro.pc2 + I(hydro.pc2^2), ~ clim.pc1 , ~ regulation + I(regulation^2),  ~ soil.pc2 + soil.pc3, data = allPC)
-exotics.varpart2 <- varpart(allPC$exotics, ~ hydro.pc1 + I(hydro.pc1^2) + hydro.pc2 + I(hydro.pc2^2),  ~ regulation + I(regulation^2), ~ replicate, data = allPC)
-exotics.varpart3 <- varpart(allPC$exotics ~ hydro.pc1 + I(hydro.pc1^2) 
+exotics.varpart2 <- varpart(allPC$exotics, ~ hydro.pc1 + I(hydro.pc1^2) + hydro.pc2 + I(hydro.pc2^2),  
+                                           ~ regulation + I(regulation^2), 
+                                           ~ production_natural_w + production_dryland_w + intensive_w + conservation_w + production_irrigated_w, data = allPC)
+                                          
 
-
-exotics.varpart
+exotics.varpart2
 plot(exotics.varpart)
 
 exotics.lm2x <- lm(exotics ~ hydro.pc1, allPC)
@@ -158,5 +196,19 @@ richness.varpart
 plot(richness.varpart)
 
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
