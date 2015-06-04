@@ -1,13 +1,25 @@
+source("scripts/functions.R")
+#source("scripts/trait_cleaning.R")
+
+options(na.action = "na.fail")
+
+library(plyr)
+library(reshape2)
+library(reshape)
+library(FD)
+library(ggplot2)
+library(missForest)
+library(SYNCSA)
+library(fossil)
+require(vegan)
+require(MuMIn)
+require(nlme)
+
 alldata_reduced <- read.csv("data/alldata_naomit_reduced.csv", header=T)
 
 # FDis #
 
 getAllStats(alldata_reduced, alldata_reduced$FDis, FD)
-
-C_MaxM.x + I(C_MaxM.x^2) 
-LSPeak.x + I(LSPeak.x^2)
-
-soil_soc
 
 FDis <- lme(FDis ~ C_MaxM.x + I(C_MaxM.x^2) + LSPeak.x + I(LSPeak.x^2) + soil_soc, random = ~1|replicate, data = alldata_reduced)
 FDis.1 <- lm(FDis ~ C_MaxM.x + I(C_MaxM.x^2) + LSPeak.x + I(LSPeak.x^2) + soil_soc, data = alldata_reduced)
@@ -15,7 +27,6 @@ FDis.2 <- lme(FDis ~ C_MaxM.x + I(C_MaxM.x^2) + LSPeak.x + I(LSPeak.x^2), random
 FDis.3 <- lm(FDis ~ C_MaxM.x + I(C_MaxM.x^2) + LSPeak.x + I(LSPeak.x^2), data = alldata_reduced)
 FDis.4 <- lm(FDis ~ C_MaxM.x + I(C_MaxM.x^2), data = alldata_reduced)
 FDis.4a <- lm(log10(FDis) ~ C_MaxM.x + I(C_MaxM.x^2), data = alldata_reduced)
-
 FDis.5 <- lme(FDis ~ C_MaxM.x + I(C_MaxM.x^2), random = ~1|replicate, data = alldata_reduced)
 FDis.6 <- lm(FDis ~  C_MaxM.x + I(C_MaxM.x^2) + regulation + I(regulation^2), data = alldata_reduced)
 
@@ -35,62 +46,236 @@ exotics.x.lme <- lme(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2)
                  + HSPeak.x + I(HSPeak.x^2), 
                  random = ~1|replicate,
                  data = alldata_reduced)
-exotics.x.lm.dredge <- dredge(exotics.x.lme)
-summary(model.avg(exotics.x.lme.dredge))
+#exotics.x.lm.dredge <- dredge(exotics.x.lme)
+#summary(model.avg(exotics.x.lme.dredge))
 
-subset(exotics.x.lme.dredge, delta < 4)
-
-exotics.x.lm1 <- lme(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2) + C_MinM.x + I(C_MinM.x^2), random = ~1|replicate, data = alldata_reduced)
-exotics.x.lm1a <- lm(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2) + C_MinM.x + I(C_MinM.x^2), data = alldata_reduced)
-AICc(exotics.x.lm1, exotics.x.lm1a)
-
-
-exotics.x.lm <- lm(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2)
-                     + CVAnnLSMeanDur.x
-                     + C_MinM.x + I(C_MinM.x^2)
-                     + LSMeanDur.x + I(LSMeanDur.x^2)
-                     + C_MaxM.x
-                     + CVMDFDry.x + I(CVMDFDry.x^2)
-                     + CVAnnHSMeanDur.x
-                     + HSPeak.x + I(HSPeak.x^2), 
-                     data = alldata_reduced)
-
-exotics.x.lm.dredge <- dredge(exotics.x.lm)
-
-subset(exotics.x.lm.dredge, delta < 4)
-
-exotics.x.lm.avg <- model.avg(exotics.x.lm.dredge)
-summary(exotics.x.lm.avg)
-
-
-exotics.varpart <- varpart(alldata_reduced$exotics,  
+exotics.x.varpart <- varpart(alldata_reduced$exotics,  
                             ~ CVAnnBFI.x + I(CVAnnBFI.x^2),
-                         # ~ C_MinM.x + I(C_MinM.x^2),
+#                          ~ C_MinM.x + I(C_MinM.x^2),
                           ~ LSMeanDur.x + I(LSMeanDur.x^2),
                          # ~ C_MaxM.x,
                          # ~ CVMDFDry.x + I(CVMDFDry.x^2),
                          # ~ CVAnnHSMeanDur.x,
                           ~ HSPeak.x + I(HSPeak.x^2), 
                           data = alldata_reduced)
-exotics.varpart
-plot(exotics.varpart)
+exotics.x.varpart
+plot(exotics.x.varpart)
 
 
-exotics.landuse.lm <- lme(exotics ~ production_irrigated_w + I(production_irrigated_w^2)
-                 +production_natural_w
-                 +conservation_w + I(conservation_w^2)
-                 +production_dryland_w, 
-                 random = ~1|replicate,
-                 data = alldata_reduced)
-exotics.landuse.lm.dredge <- dredge(exotics.landuse.lm)
+exotics.landuse.varpart <- varpart(alldata_reduced$exotics,
+                                   ~production_irrigated_w + I(production_irrigated_w^2),
+                                   ~production_natural_w,
+                                   ~conservation_w + I(conservation_w^2),
+#                                   ~production_dryland_w, 
+                                   data = alldata_reduced)
+exotics.landuse.varpart
+plot(exotics.landuse.varpart)
 
 
-exotics.y.lm <- lme(exotics ~ C_MinM.y + I(C_MinM.y^2), random = ~1|replicate, data = alldata_reduced)
-exotics.y.lm.dredge <- dredge(exotics.y.lm)
+#exotics.y.lm <- lm(exotics ~ C_MinM.y + I(C_MinM.y^2), data = alldata_reduced)
 
-exotics.soil.lm <- lme(exotics ~ soil_phc + soil_der, , random = ~1|replicate,  data = alldata_reduced)
-exotics.soil.lm.dredge <- dredge(exotics.soil.lm)
+exotics.soil.varpart <- varpart(alldata_reduced$exotics, 
+                                ~soil_phc,
+                                ~soil_der,
+                                data = alldata_reduced)
+exotics.soil.varpart
+plot(exotics.soil.varpart)
 
-exotics.clim.lm <- lme(exotics ~ clim_tsea + clim_pdry + I(clim_pdry^2) + clim_pwet + I(clim_pwet^2), random = ~1|replicate, data = alldata_reduced)
-exotics.clim.lm.dredge <- dredge(exotics.clim.lm)
 
+exotics.clim.varpart <- varpart(alldata_reduced$exotics, 
+                               ~clim_tsea,
+                                ~clim_pdry + I(clim_pdry^2),
+                #                ~clim_pwet + I(clim_pwet^2),
+                                data = alldata_reduced)
+exotics.clim.varpart
+plot(exotics.clim.varpart)                                
+
+
+  # models
+
+exotics.x.lm <- lm(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2)
+                            +LSMeanDur.x + I(LSMeanDur.x^2)
+                            +HSPeak.x + I(HSPeak.x^2), 
+                   data = alldata_reduced)
+exotics.x.lme <- lme(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2)
+                   +LSMeanDur.x + I(LSMeanDur.x^2)
+                   +HSPeak.x + I(HSPeak.x^2), 
+                   random = ~1|replicate,
+                   data = alldata_reduced)
+
+exotics.landuse.lm <- lm(exotics ~production_irrigated_w + I(production_irrigated_w^2) 
+                         + production_natural_w 
+                         +conservation_w + I(conservation_w^2),
+                         data = alldata_reduced)
+exotics.landuse.lme <- lme(exotics ~ production_irrigated_w + I(production_irrigated_w^2) 
+                           + production_natural_w 
+                           +conservation_w + I(conservation_w^2),
+                           random = ~1|replicate,
+                           data = alldata_reduced)
+
+exotics.y.lm <- lm(exotics ~ C_MinM.y + I(C_MinM.y^2), data = alldata_reduced)
+exotics.y.lme<- lme(exotics ~ C_MinM.y + I(C_MinM.y^2), random = ~1|replicate, data = alldata_reduced)
+
+exotics.soil.lm <- lm(exotics ~ soil_phc + soil_der, data = alldata_reduced)
+exotics.soil.lme <- lme(exotics ~ soil_phc + soil_der, random = ~1|replicate, data = alldata_reduced)
+
+exotics.clim.lm <- lm(exotics ~ clim_tsea + clim_pdry + I(clim_pdry^2), data = alldata_reduced)
+exotics.clim.lme <- lme(exotics ~ clim_tsea + clim_pdry + I(clim_pdry^2), random = ~1|replicate, data = alldata_reduced)
+
+exotics.full.lm <- lm(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2)
+                      +LSMeanDur.x + I(LSMeanDur.x^2) +HSPeak.x + I(HSPeak.x^2) 
+                      + production_irrigated_w + I(production_irrigated_w^2)+ production_natural_w +conservation_w + I(conservation_w^2) 
+                      + C_MinM.y + I(C_MinM.y^2) 
+                      + clim_tsea + clim_pdry + I(clim_pdry^2), 
+                      data = alldata_reduced)
+
+exotics.interaction.lm1a <- lm(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2)+LSMeanDur.x + I(LSMeanDur.x^2)+HSPeak.x + I(HSPeak.x^2) + production_irrigated_w, data = alldata_reduced)
+
+exotics.interaction.lm1b <- lm(exotics ~ CVAnnBFI.x + I(CVAnnBFI.x^2)+LSMeanDur.x + I(LSMeanDur.x^2)+HSPeak.x + I(HSPeak.x^2) + production_irrigated_w + CVAnnBFI.x:production_irrigated_w, data = alldata_reduced)
+
+exotics.full.lm.dredge <- dredge(exotics.full.lm, m.max = 6, trace=TRUE)
+subset(exotics.full.lm.dredge, delta < 4)
+
+exotics.best1a <- lm(exotics ~ +LSMeanDur.x + I(LSMeanDur.x^2)+HSPeak.x + I(HSPeak.x^2) + production_irrigated_w  + production_natural_w, data = alldata_reduced)
+exotics.best1b <- lm(exotics ~ +LSMeanDur.x + I(LSMeanDur.x^2)+HSPeak.x + I(HSPeak.x^2) + production_irrigated_w + I(production_irrigated_w^2) + production_natural_w + LSMeanDur.x:production_irrigated_w, data = alldata_reduced)
+exotics.best1c <- lm(exotics ~ +LSMeanDur.x + I(LSMeanDur.x^2)+HSPeak.x + I(HSPeak.x^2) + production_irrigated_w + production_natural_w, data = alldata_reduced)
+exotics.best1d <- lm(exotics ~ +LSMeanDur.x + I(LSMeanDur.x^2)+HSPeak.x + I(HSPeak.x^2), data = alldata_reduced)
+
+AICc(exotics.x.lm,
+     exotics.x.lme,
+     exotics.landuse.lm,
+     exotics.landuse.lme,
+     exotics.y.lm,
+     exotics.y.lme,
+     exotics.soil.lm,
+     exotics.soil.lme,
+     exotics.clim.lm,
+     exotics.clim.lme,
+     exotics.full.lm,
+     exotics.interaction.lm1a,
+     exotics.interaction.lm1b,
+     exotics.best1a,
+     exotics.best1b,
+     exotics.best1c,
+     exotics.best1d)
+     
+  
+exotics.full.varpart <- varpart(alldata_reduced$exotics, 
+                                 ~ CVAnnBFI.x + I(CVAnnBFI.x^2)
+                                +LSMeanDur.x + I(LSMeanDur.x^2)
+                                +HSPeak.x + I(HSPeak.x^2),
+                                
+                                ~production_irrigated_w + I(production_irrigated_w^2) 
+                                + production_natural_w 
+                                +conservation_w + I(conservation_w^2),
+                                
+                                ~C_MinM.y + I(C_MinM.y^2),
+                                
+                             #   ~ soil_phc + soil_der,
+                                
+                                ~ clim_tsea + clim_pdry + I(clim_pdry^2),
+                                
+                                data = alldata_reduced)
+  
+exotics.full.varpart  
+plot(exotics.full.varpart)  
+
+
+
+# richness #
+
+getAllStats(alldata_reduced, alldata_reduced$richness, FD)
+
+richness.x.varpart <- varpart(alldata_reduced$richness, 
+                              ~C_MinM.x + I(C_MinM.x^2),
+                            #  ~CVAnnHSMeanDur.x,
+                              ~M_MinM.x,
+                              ~HSMeanDur.x + I(HSMeanDur.x^2),
+                              data = alldata_reduced)
+richness.x.varpart                              
+plot(richness.x.varpart)
+
+
+richness.y.varpart <- varpart(alldata_reduced$richness,
+                              ~M_MinM.y + I(M_MinM.y^2),
+                              ~HSMeanDur.y + I(HSMeanDur.y^2), 
+                              data = alldata_reduced)
+richness.y.varpart                              
+plot(richness.y.varpart)
+
+
+richness.clim.varpart <- varpart(alldata_reduced$richness,
+                                 ~ clim_pwet,
+                                # ~clim_tsea + I(clim_tsea^2),
+                                 ~clim_pdry,
+                                 ~clim_tcld + I(clim_tcld^2),
+                                 data = alldata_reduced)
+plot(richness.clim.varpart)
+richness.clim.varpart
+
+richness.soil.varpart <- varpart(alldata_reduced$richness, 
+                                 ~ soil_pto,
+                                 ~ soil_phc, 
+                                 ~ soil_soc,
+                                 data = alldata_reduced)
+richness.soil.varpart
+plot(richness.soil.varpart)
+
+
+richness.x.lm <- lm(richness 
+                    ~C_MinM.x + I(C_MinM.x^2)
+                   + M_MinM.x
+                   + HSMeanDur.x + I(HSMeanDur.x^2),
+                    data = alldata_reduced)
+
+richness.y.lm <- lm(richness ~ M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2), data = alldata_reduced)
+
+richness.clim.lm <- lm(richness ~ clim_pwet + clim_pdry + clim_tcld + I(clim_tcld^2), data = alldata_reduced)
+
+richness.soil.lm <- lm(richness ~ soil_pto + soil_phc + soil_soc, data = alldata_reduced)
+
+richness.landuse.lm <- lm(richness ~ production_dryland_w + I(production_dryland_w^2), data = alldata_reduced)
+
+richness.all.lm <- lm(richness ~ M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2) + clim_pwet + clim_pdry + clim_tcld + I(clim_tcld^2) + C_MinM.x + I(C_MinM.x^2)+ M_MinM.x + HSMeanDur.x + I(HSMeanDur.x^2), data = alldata_reduced)
+
+richness.combined.lm1 <- lm(richness ~M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2) + clim_tsea, data = alldata_reduced)
+
+richness.combined.lm2 <- lm(richness ~M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2) + clim_tsea + M_MinM.y:clim_tsea, data = alldata_reduced)
+
+richness.combined.lm3 <- lm(richness ~ C_MinM.x + I(C_MinM.x^2) + M_MinM.x + HSMeanDur.x + I(HSMeanDur.x^2) + M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2) + clim_pwet + clim_pdry + clim_tcld + I(clim_tcld^2), data = alldata_reduced)
+
+richness.combined.lm4 <- lm(richness ~M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2) + clim_pdry + HSMeanDur.y:clim_pdry, data = alldata_reduced)
+
+richness.combined.lm5 <- lm(richness ~M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2) + clim_pdry + clim_tsea + HSMeanDur.y:clim_pdry +  M_MinM.y:clim_tsea, data = alldata_reduced)
+
+richness.combined.lm6 <- lm(richness ~M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2) + clim_pdry + clim_tsea, data = alldata_reduced)
+
+
+AICc(richness.x.lm,
+     richness.y.lm,
+     richness.clim.lm,
+     richness.soil.lm,
+     richness.landuse.lm,
+     richness.all.lm,
+     richness.combined.lm1,
+     richness.combined.lm2,
+     richness.combined.lm3,
+     richness.combined.lm4,
+     richness.combined.lm5,
+     richness.combined.lm6)
+
+richness.all.varpart <- varpart(alldata_reduced$richness,
+                               ~ C_MinM.x + I(C_MinM.x^2) + M_MinM.x + HSMeanDur.x + I(HSMeanDur.x^2),
+                                
+                                ~M_MinM.y + I(M_MinM.y^2) + HSMeanDur.y + I(HSMeanDur.y^2),
+                                
+                                ~clim_pwet + clim_pdry + clim_tcld + I(clim_tcld^2),
+                                
+                           #    ~soil_pto + soil_phc + soil_soc,
+                                
+                           #     ~production_dryland_w + I(production_dryland_w^2),
+                                
+                                data = alldata_reduced)
+richness.all.varpart
+plot(richness.all.varpart)
+                                

@@ -256,6 +256,8 @@ length(unique(traits.flowering.duration$Taxon))
 traits.flowering.duration$Taxon <- as.character(traits.flowering.duration$Taxon)
 traits.flowering.duration$Taxon <- as.factor(traits.flowering.duration$Taxon)
 
+write.csv(traits.flowering.duration, "output/traits_floweringduration.csv")
+
 ####### CALCULATE LEAF NARROWNESS #######
 
 traits.leaf.narrowness <- as.data.frame(cbind(traits["Taxon"], 
