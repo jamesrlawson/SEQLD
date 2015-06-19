@@ -278,4 +278,42 @@ richness.all.varpart <- varpart(alldata_reduced$richness,
                                 data = alldata_reduced)
 richness.all.varpart
 plot(richness.all.varpart)
-                                
+
+
+## FRic ##
+
+getAllStats(alldata_reduced, alldata_reduced$FRic, FD)
+
+FRic.clim.lm <- lm(FRic ~ clim_pdry + I(clim_pdry^2) + clim_tsea + clim_pwet + I(clim_pwet^2), data = alldata_reduced)
+FRic.clim.lm.dredge <- dredge(FRic.clim.lm, trace=TRUE) # clim_pdr + I(clim_pdr^2) wins
+
+FRic.soil.lm <- lm(FRic ~ soil_phc + I(soil_phc^2) + soil_pto, data = alldata_reduced)
+FRic.soil.lm.dredge <- dredge(FRic.soil.lm, trace=TRUE)
+
+FRic.soil.varpart <- varpart(alldata_reduced$FRic,
+                             ~ soil_phc + I(soil_phc^2),
+                             ~ soil_pto,
+                             data = alldata_reduced)
+FRic.soil.varpart
+plot(FRic.soil.varpart)
+
+FRic.y.varpart <- varpart(alldata_reduced$FRic,
+                          ~ M_MinM.y,
+                          ~ M_MaxM.y,
+                          data = alldata_reduced)
+FRic.y.varpart
+plot(FRic.y.varpart)
+
+
+FRic.varpart <- varpart(alldata_reduced$FRic,
+                     #   ~ clim_pdry + I(clim_pdry^2),
+                        ~soil_phc + I(soil_phc^2) + soil_pto,
+                        ~M_MinM.y,
+                        ~production_irrigated_w,
+                        data =alldata_reduced)
+FRic.varpart
+plot(FRic.varpart)
+  
+
+
+# to do: select linear vs quad according to AIC #
