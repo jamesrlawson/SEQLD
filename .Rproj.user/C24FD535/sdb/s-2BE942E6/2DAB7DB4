@@ -1,0 +1,18 @@
+{
+    "contents" : "exotics.x.lm <- lm(exotics ~ C_MaxM.x + I(C_MaxM.x^2), data = alldata_reduced)\nexotics.x.lme <- lme(exotics ~ C_MaxM.x + I(C_MaxM.x^2), random = ~1|replicate, data = alldata_reduced)\n\nexotics.landuse.lm <- lm(exotics ~ ~production_irrigated_w + I(production_irrigated_w^2) \n                      + production_natural_w \n                      +conservation_w + I(conservation_w^2),\n                      data = alldata_reduced)\nexotics.landuse.lme <- lme(exotics ~ ~production_irrigated_w + I(production_irrigated_w^2) \n                        + production_natural_w \n                        +conservation_w + I(conservation_w^2),\n                        random = ~1|replicate,\n                        data = alldata_reduced)\n\nexotics.y.lm <- lm(exotics ~ C_MinM.y + I(C_MinM.y^2), data = alldata_reduced)\nexotics.y.lme<- lme(exotics ~ C_MinM.y + I(C_MinM.y^2), random = ~1|replicate, data = alldata_reduced)",
+    "created" : 1433393872691.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1499648378",
+    "id" : "2DAB7DB4",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

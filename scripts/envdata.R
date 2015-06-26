@@ -59,6 +59,7 @@ landuse <- read.csv("data/landuse.csv", header=TRUE)
     alldata$redun <- FD.redun$FunRedundancy
     alldata$nbsp <- FD$nbsp
     alldata$richness <- richness$richness.stand.ACE
+    alldata$richness.stand <- richness$richness.stand
     alldata$exotics <- exotics$proportionExotic
     
     alldata$SLA<- CWM$SLA
@@ -127,9 +128,8 @@ landuse <- read.csv("data/landuse.csv", header=TRUE)
 # add in landuse data
     
     alldata1 <- merge(alldata1, landuse, by="site", all.x = TRUE, fill="NA")
-    
+    alldata1.naomit <- na.omit(alldata1)
 
-    
     
     
     

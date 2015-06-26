@@ -239,7 +239,8 @@ hydrosites$FunRao <- FD.redun$FunRao
 hydrosites$redun <- FD.redun$FunRedundancy
 hydrosites$nbsp <- FD$nbsp
 
-hydrosites$richness <- richness$richness.stand.ACE
+#hydrosites$richness <- richness$richness.stand.ACE
+hydrosites$richness <- richness$richness.stand
 hydrosites$exotics <- exotics$proportionExotic
 
 CWM <- FD$CWM

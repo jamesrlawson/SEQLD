@@ -32,6 +32,112 @@ FDis.6 <- lm(FDis ~  C_MaxM.x + I(C_MaxM.x^2) + regulation + I(regulation^2), da
 
 AICc(FDis,FDis.1,FDis.2,FDis.3,FDis.4, FDis.4a,FDis.5, FDis.6)
 
+FDis.varpart <- varpart(alldata_reduced$FDis,
+                        ~ C_MaxM.x + I(C_MaxM.x^2),
+                        ~ LSPeak.x + I(LSPeak.x^2),
+                        ~ soil_soc,
+                        data = alldata_reduced)
+FDis.varpart
+plot(FDis.varpart)
+
+
+
+# FRic
+
+getAllStats(alldata_reduced, alldata_reduced$FRic, FD)
+
+FRic.y.varpart <- varpart(alldata_reduced$FRic,
+                          ~ M_MinM.y, 
+                          ~ M_MaxM.y,
+                          data = alldata_reduced)
+FRic.y.varpart
+plot(FRic.y.varpart)
+
+FRic.soil.varpart <- varpart(alldata_reduced$FRic,
+                             ~soil_phc,
+                             ~soil_pto,
+                             data = alldata_reduced)
+FRic.soil.varpart
+plot(FRic.soil.varpart)
+
+FRic.clim.varpart <- varpart(alldata_reduced$FRic,
+                             ~ clim_pdry + I(clim_pdry^2),
+                             ~ clim_tsea,
+                             ~ clim_pwet + I(clim_pwet^2),
+                             data = alldata_reduced)
+FRic.clim.varpart
+plot(FRic.clim.varpart)
+
+
+FRic.varpart <- varpart(alldata_reduced$FRic,
+                        ~ M_MinM.y,
+                        ~ soil_phc + soil_pto,
+                        ~ production_irrigated_w,
+                        ~ clim_pdry + I(clim_pdry^2) + clim_tsea,
+                        data = alldata_reduced)
+FRic.varpart
+plot(FRic.varpart)
+                        
+
+# FDiv
+
+getAllStats(alldata_reduced, alldata_reduced$FDiv, FD)
+
+soil_nto
+soil_soc
+clim_twrm
+CVAnnBFI.x
+MDFMDFDry.x
+LSPeak.x + I(LSPeak.x^2)
+C_MaxM.x + I(C_MaxM.x^2)
+
+FDiv.soil.varpart <- varpart(alldata_reduced$FDiv,
+                             ~soil_nto,
+                             ~soil_soc,
+                             data = alldata_reduced)
+FDiv.soil.varpart
+plot(FDiv.soil.varpart)
+
+FDiv.x.varpart <- varpart(alldata_reduced$FDiv,
+                          ~ CVAnnBFI.x,
+                          ~ MDFMDFDry.x,
+                          ~ LSPeak.x + I(LSPeak.x^2),
+                          ~ C_MaxM.x + I(C_MaxM.x^2),
+                          data = alldata_reduced)
+FDiv.x.varpart
+plot(FDiv.x.varpart)
+
+FDiv.varpart <- varpart(alldata_reduced$FDiv,
+                        ~ clim_twrm,
+                        ~ soil_nto + soil_soc,
+                        ~ CVAnnBFI.x + MDFMDFDry.x + LSPeak.x + I(LSPeak.x^2),
+                        data = alldata_reduced)
+FDiv.varpart
+plot(FDiv.varpart)
+
+     
+# FEve
+
+getAllStats(alldata_reduced, alldata_reduced$FEve, FD)
+
+
+FEve.x.varpart <- varpart(alldata_reduced$FEve, 
+                          ~ MDFMDFDry.x + I(MDFMDFDry.x^2),
+                          ~ LSPeak.x,
+                          data = alldata_reduced)
+FEve.x.varpart
+plot(FEve.x.varpart)
+
+FEve.varpart <- varpart(alldata_reduced$FEve, 
+                        ~ intensive_w,
+                        ~ clim_psea,
+                        ~ MDFMDFDry.x + I(MDFMDFDry.x^2) + LSPeak.x,
+                        data = alldata_reduced)
+FEve.varpart
+plot(FEve.varpart)
+
+
+
 # exotics #
 
 getAllStats(alldata_reduced, alldata_reduced$exotics, FD)
@@ -182,7 +288,7 @@ plot(exotics.full.varpart)
 
 
 
-# richness #
+# richness (ACE.stand) #
 
 getAllStats(alldata_reduced, alldata_reduced$richness, FD)
 
@@ -279,6 +385,57 @@ richness.all.varpart <- varpart(alldata_reduced$richness,
 richness.all.varpart
 plot(richness.all.varpart)
 
+
+# richness (area standardised) #
+
+getAllStats(alldata_reduced, alldata_reduced$richness.stand, FD)
+
+richness.stand.y.varpart <- varpart(alldata_reduced$richness.stand,
+                                    ~M_MinM.y + I(M_MinM.y^2),
+#                                    ~MDFMDFDry.y + I(MDFMDFDry.y^2),
+                                    ~M_MaxM.y + I(M_MaxM.y^2),
+                                    ~HSMeanDur.y,
+                                    data = alldata_reduced)
+richness.stand.y.varpart
+plot(richness.stand.y.varpart) # interaction between M_MinM.y and HSMeanDur.y is important
+
+richness.stand.climate <- varpart(alldata_reduced$richness.stand,
+                                  ~clim_pwet,
+                         #         ~clim_pdry,
+                                  ~clim_tsea,
+                          #        ~clim_tcld + I(clim_tcld^2),
+                                  data = alldata_reduced)
+richness.stand.climate
+plot(richness.stand.climate)
+
+richness.stand.soil <- varpart(alldata_reduced$richness.stand,
+                               ~soil_phc,
+                               ~soil_soc,
+                               ~soil_pto,
+                               data = alldata_reduced)
+richness.stand.soil
+plot(richness.stand.soil)
+
+richness.stand.x <- varpart(alldata_reduced$richness.stand,
+                            ~C_MinM.x + I(C_MinM.x^2),
+                            ~HSMeanDur.x + I(HSMeanDur.x^2),
+                            ~CVAnnHSMeanDur.x,
+                            ~M_MinM.x,
+                            data = alldata_reduced)
+richness.stand.x
+plot(richness.stand.x)
+
+
+richness.stand.varpart <- varpart(alldata_reduced$richness.stand,
+                                  ~M_MinM.y + I(M_MinM.y^2) + M_MaxM.y + I(M_MaxM.y^2) + HSMeanDur.y + M_MaxM.y:HSMeanDur.y,
+                                 # ~clim_pwet + clim_tsea,
+                                 # ~soil_phc + soil_soc + soil_pto,
+                                  ~C_MinM.x + I(C_MinM.x^2) + HSMeanDur.x + I(HSMeanDur.x^2) + CVAnnHSMeanDur.x + M_MinM.x,
+                                  ~exotics,
+                                #  ~production_dryland_w + I(production_dryland_w^2),
+                                  data = alldata_reduced)
+richness.stand.varpart
+plot(richness.stand.varpart)
 
 ## FRic ##
 
